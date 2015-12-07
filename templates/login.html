@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+<script type="text/javascript">
+    function gotoregister(){
+
+    }
+</script>
+<html>
+<head><title>FijiBook</title></head>
+<body>
+<img src="../static/img/billion.jpg" alt="cc" />
+<h1>Please login</h1>
+<form method="post" action="/login">
+    {% raw xsrf_form_html() %}
+    <p>user<br><input type="text" name="user" value="public"></p>
+    <p>password<br><input type="password" name="passwd" value="public"></p>
+<input type="submit">
+    <p>{{info}}</p>
+
+</form>
+<div>no account?</div>
+<a href="/register">register </a>
+</body>
+</html>

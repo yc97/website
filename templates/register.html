@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+<html>
+<head><title>FijiBook-register</title></head>
+<body>
+
+<h1>Please Register</h1>
+<form method="post" action="/register">
+    {% raw xsrf_form_html() %}
+    <p>username:&nbsp<br><input type="text" name="user" value="public"></p>
+    <p>password:&nbsp<br><input type="password" name="passwd" value="public"></p>
+<input type="submit">
+    <p>{{info}}</p>
+</form>
+</body>
+</html>

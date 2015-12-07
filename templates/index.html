@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+<html>
+<head>
+    <title>FijiBook</title>
+</head>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
+
+    <style type="text/css">
+		body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{width:80%;height:50%;}
+		p{margin-left:5px; font-size:14px;}
+	</style>
+<body>
+<div>
+    <h1> <font size=+10 color=purple><strong> FijiBook </strong></font> </h1>
+<img src="../static/img/billion.jpg" alt="cc"/>
+</div>
+    <h1>Hello, <font color=#DF01A5>{{user}}</font></h1>
+<p> Now you have <font size=+2 color=#DF01A5><strong>{{recSum}}</strong></font> records!! </p>
+<p> The latest rec is added at <font size=+2 color=#DF01A5><strong>{{newTime}}</strong></font></p>
+<a href="/logout">logout</a>
+<h2>Please enter terms below.</h2>
+<form method="post" action="/index">
+    {% raw xsrf_form_html() %}
+    <p>money<br><input type="number" name="money" required="required"></p>
+    <p>usage<br><input type="text" name="usage"></p>
+    <p>usageType<br><input type="text" name="usageType"></p>
+    <p>longitude</p>
+    <div style="display:inline">
+        <input type="text" id="lng" name="lng" style="float:left" value="">
+    </div>
+    <br>
+    <p>latitude</p>
+    <div style="display:inline">
+        <input type="text" id="lat" name="lat" style="float:left" value="">
+    </div>
+    <br>
+    <p>location</p>
+    <div style="display:inline">
+        <input type="text" id="inputLocation" name="inputLocation" style="float:left" value="" >
+    </div>
+    <br>
+    <br>
+    <input type="submit">
+</form>
+<p><font size=+2 color=#DF01A5><strong>Your records:</strong></font> </p>
+
+
+<table>
+    <thead >
+    <tr >
+        {% for i in thead %}
+        <th >{{i}}</th>
+        {% end %}
+    </tr>
+    </thead>
+    {% for j in tbody %}
+    <tbody>
+    <tr>
+        {% for j1 in j %}
+        <td>{{j1}}</td>
+        {% end %}
+    </tr>
+    </tbody>
+    {% end %}
+</table>
+<p><font size=+2 color=#DF01A5><strong>Your current location:</strong></font> </p>
+<div id="allmap"></div>
+<div style="display:inline">
+    <div style="float:left">your location: &nbsp&nbsp</div>
+    <div id="location">location </div>
+    <br />
+</div>
+<div style="display:inline">
+    <div style="float:left">your address: &nbsp&nbsp</div>
+    <div id="address">address </div>
+    <br />
+</div>
+
+
+<script type="text/javascript">
+	var map = new BMap.Map("allmap");
+	var point = new BMap.Point(116.331398,39.897445);
+	map.centerAndZoom(point,15);
+	var geolocation = new BMap.Geolocation();
+	var gc = new BMap.Geocoder();
+	geolocation.getCurrentPosition(function(r){
+		if(this.getStatus() == BMAP_STATUS_SUCCESS){
+			var mk = new BMap.Marker(r.point);
+			map.addOverlay(mk);
+			map.panTo(r.point);
+			document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
+			gc.getLocation(r.point, function(rs){
+                var addComp = rs.addressComponents;
+                document.getElementById("address").innerHTML =(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                document.getElementById("lng").value = r.point.lng;
+                document.getElementById("lat").value = r.point.lat;
+                document.getElementById("inputLocation").value = (addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+    });
+		}
+		else {
+			alert('failed'+this.getStatus());
+		}
+	},{enableHighAccuracy: true})
+
+
+
+	//关于状态码
+	//BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+	//BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+	//BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+	//BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+	//BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+	//BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+	//BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+	//BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+	//BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+</script>
+
+<!DOCTYPE html>
+</body>
+</html>
