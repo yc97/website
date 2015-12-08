@@ -14,12 +14,12 @@ class Fijibook_MySQLdb(MySQLDatabase):
             print traceback.format_exc()
 
     def getBalance(self, user):
-        usertable = user + '_balance'
+        usertable = 'balance'
         cmd = "select money from %s where user = '%s' " % (usertable, user)
         return self.execute(cmd)
 
     def saveBalance(self, user, money, location='', usage='', usageType='', lng='', lat=''):
-        usertable = user + '_balance'
+        usertable = 'balance'
         cmd1 = "insert into %s (`user`, `money`, `time`, `location`, `usage`, `usageType`, `lng`, `lat`) \
                 values('%s', %f, now(), '%s', '%s', '%s', '%s', '%s')" \
                % (usertable, user, float(money), location, usage, usageType, lng, lat)
@@ -81,34 +81,34 @@ class Fijibook_MySQLdb(MySQLDatabase):
         return self.execute(cmd)
 
     def getRecSum(self):
-        usertable = user + '_balance'
+        usertable = 'balance'
         cmd = "select count(*) from %s"% usertable
         return self.execute(cmd)
 
     def getUserRecSum(self, user):
-        usertable = user + '_balance'
+        usertable = 'balance'
         cmd = "select count(*) from %s where user = '%s'"% (usertable, user)
         return self.execute(cmd)
 
     def getNewestRecTime(self, user):
-        usertable = user + '_balance'
-        cmd = "select max(time) from %s"% usertable
+        usertable = 'balance'
+        cmd = "select max(time) from %s where `user` = '%s'"% (usertable, user)
         return self.execute(cmd)
 
     def getTable(self):
-        usertable = user + '_balance'
-        cmd = "select `user`, `money`, `time`, `location`, `usage`, `usageType` from %s"% usertable
-        return self.execute(cmd)
-
-    def getUserTable(self, user):
-        usertable = user + '_balance'
+        usertable = 'balance'
         cmd = "select `user`, `money`, `time`, `location`, `usage`, `usageType` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
 
-    def createUserTable(self, user):
-        usertable = user + '_balance'
-        cmd = "create table %s like balance" % str(usertable)
+    def getUserTable(self, user):
+        usertable = 'balance'
+        cmd = "select `user`, `money`, `time`, `location`, `usage`, `usageType` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
+
+    # def createUserTable(self, user):
+    #     usertable = user + '_balance'
+    #     cmd = "create table %s like balance" % str(usertable)
+    #     return self.execute(cmd)
 
 if __name__ == '__main__':
     Defaults.config_path = '../config/data.conf'
