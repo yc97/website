@@ -28,7 +28,7 @@ class indexHandler(BaseHandler):
         else:
             self.render('index.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
-                        thead=['user', 'money', 'time', 'location', 'usage', 'usageType'],
+                        thead=['user', 'money', 'time', 'location', 'remark', 'type'],
                         tbody=tableRec['result'])
 
     @tornado.web.authenticated
@@ -36,11 +36,14 @@ class indexHandler(BaseHandler):
         user = self.get_secure_cookie('user')
         money = self.get_argument('money')
         location = self.get_argument('inputLocation')
-        usage = self.get_argument('usage')
-        usageType = self.get_argument('usageType')
+        remark = self.get_argument('remark')
+        type = self.get_argument('type')
+        moneySel = self.get_argument('moneySel')
+        if moneySel == 'expenses':
+            money = -float(money)
         lng = self.get_argument('lng')
         lat = self.get_argument('lat')
-        rec = Fijibook_MySQLdb().saveBalance(user=user, money=money, location=location, usage=usage, usageType=usageType, lng=lng, lat=lat)
+        rec = Fijibook_MySQLdb().saveBalance(user=user, money=money, location=location, remark=remark, type=type, lng=lng, lat=lat)
         if rec['code']:
             self.write(rec)
         self.redirect('/index')

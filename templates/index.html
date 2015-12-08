@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
 <html>
 <head>
-    <title>FijiBook</title>
+    <title>FijiBook非记不可</title>
 </head>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
 
@@ -13,8 +13,8 @@
 	</style>
 <body>
 <div>
-    <h1> <font size=+10 color=purple><strong> FijiBook </strong></font> </h1>
-<img src="../static/img/billion.jpg" alt="cc"/>
+    <h1> <font size=+10 color=purple><strong> FijiBook非记不可 </strong></font> </h1>
+<img src="../static/img/bill.png" alt="cc"/>
 </div>
     <h1>Hello, <font color=#DF01A5>{{user}}</font></h1>
 <p> Now you have <font size=+2 color=#DF01A5><strong>{{recSum}}</strong></font> records!! </p>
@@ -23,9 +23,13 @@
 <h2>Please enter terms below.</h2>
 <form name="info" method="post" action="/index">
     {% raw xsrf_form_html() %}
-    <p>money<br><input type="number" name="money" required="required"></p>
-    <p>usage<br><input type="text" name="usage"></p>
-    <p>usageType<br><input type="text" name="usageType"></p>
+    <p>金额<br>
+        <input type="radio" checked="checked" name="moneySel" value="expenses"/>支出
+        <input type="radio" name="moneySel" value="income"/>收入
+        <br>
+        <input type="number" step="0.01" name="money" required="required"></p>
+    <p>备注<br><input type="text" name="remark"></p>
+    <p>类型<br><input type="text" name="type"></p>
     <p>longitude</p>
     <div style="display:inline">
         <input type="text" id="lng" name="lng" style="float:left" value="">
@@ -36,17 +40,20 @@
         <input type="text" id="lat" name="lat" style="float:left" value="">
     </div>
     <br>
+    <p>street</p>
+    <div>
+        <input type="text" id="street" name="street" style="width:400px" value="" >
+    </div>
     <p>location</p>
     <div>
-        <input type="text" id="inputLocation" name="inputLocation" style="width:350px" value="" >
+        <input type="text" id="inputLocation" name="inputLocation" style="width:400px" value="" >
     </div>
-    <input type="submit">
-    <br>
-    <br>
     <input type="submit" value="非记不可">
+    <br>
+    <br>
 </form>
-<div id="locationSel" style="display:inline">
-</div>
+<form name="locationSel">
+</form>
 
 <p><font size=+2 color=#DF01A5><strong>Your records:</strong></font> </p>
 
@@ -85,10 +92,11 @@
 		if(this.getStatus() == BMAP_STATUS_SUCCESS)
 		{
 			var mk = new BMap.Marker(r.point);//标记点
+			mk.setTitle('U R here!')
 			map.addOverlay(mk);//添加覆盖层
-			var poiR = 1000//设定poi半径
-			var poiNum = 10//设定poi数量
-			map.addOverlay(new BMap.Circle(r.point,poiR));//画圆
+			var poiR = 2000//设定poi半径
+			var poiNum = 20//设定poi数量
+			//map.addOverlay(new BMap.Circle(r.point,poiR));//画圆
 			map.panTo(r.point);//把定位点转到
 			//document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
 			//地址编码转码，对指定的坐标点进行反地址解析。如果解析成功，则回调函数的参数为GeocoderResult对象，否则回调函数的参数为null。(自 1.1 新增)
@@ -107,8 +115,10 @@
                 //    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
                 document.getElementById("lng").value = r.point.lng;
                 document.getElementById("lat").value = r.point.lat;
-                document.getElementById("inputLocation").value = (addComp.province + ", " + addComp.city + ", " +
-                    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ", ");
+                var locationStreet = (addComp.province + ", " + addComp.city + ", " +
+                    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ", ")
+                document.getElementById("street").value = locationStreet;
+                document.getElementById("inputLocation").value = locationStreet + surPois[0].title;
                 //if (surPois.length < 10)
                 //    var maxI = surPois.length;
                 //else
@@ -116,11 +126,11 @@
                 for (var i=0;i<surPois.length;i++)
                 {
                     if (i==0)
-                        document.getElementById("locationSel").innerHTML += '<input type="radio" checked="checked "name="locationSel value="'
-                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>';
+                        document.locationSel.innerHTML += ('<input type="radio" onClick="check()" checked="checked" name="locationSel" value="'
+                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>');
                     else
-                        document.getElementById("locationSel").innerHTML += '<input type="radio" name="locationSel value="'
-                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>';
+                        document.locationSel.innerHTML += ('<input type="radio" onClick="check()" name="locationSel" value="'
+                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>');
                 }
             }
             ,mOption);
@@ -142,12 +152,12 @@
 
 	function check()
 	{
-        var flag=0
-        for(i=0; i<info.locationSel.length;i++)
-            if(info.locationSel[i].checked==true)
+        var flag=0;
+        for(i=0; i<document.locationSel.length;i++)
+            if(document.locationSel[i].checked==true)
             {
-                alert(info.locationSel[i].value)
-                return info.locationSel[i].value;
+                document.info.inputLocation.value = document.info.street.value + document.locationSel[i].value;
+                break;
             }
     }
 </script>

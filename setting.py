@@ -15,9 +15,9 @@
 
 
 from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, \
-    JSMapHandler, registerHandler, POIHandler
-
-from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, JSMapHandler, registerHandler, VerificationImgHandler
+    JSMapHandler, registerHandler, POIHandler, VerificationImgHandler
+#
+# from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, JSMapHandler, registerHandler,
 
 
 urls = [
