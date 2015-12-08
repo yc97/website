@@ -18,10 +18,10 @@
 </div>
     <h1>Hello, <font color=#DF01A5>{{user}}</font></h1>
 <p> Now you have <font size=+2 color=#DF01A5><strong>{{recSum}}</strong></font> records!! </p>
-<p> The latest rec is added at <font size=+2 color=#DF01A5><strong>{{newTime}}</strong></font></p>
+<p> The latest record is added at <font size=+2 color=#DF01A5><strong>{{newTime}}</strong></font></p>
 <a href="/logout">logout</a>
 <h2>Please enter terms below.</h2>
-<form method="post" action="/index">
+<form name="info" method="post" action="/index">
     {% raw xsrf_form_html() %}
     <p>money<br><input type="number" name="money" required="required"></p>
     <p>usage<br><input type="text" name="usage"></p>
@@ -37,13 +37,14 @@
     </div>
     <br>
     <p>location</p>
-    <div style="display:inline">
-        <input type="text" id="inputLocation" name="inputLocation" style="float:left" value="" >
+    <div>
+        <input type="text" id="inputLocation" name="inputLocation" style="width:350px" value="" >
     </div>
-    <br>
-    <br>
     <input type="submit">
 </form>
+<div id="locationSel" style="display:inline">
+</div>
+
 <p><font size=+2 color=#DF01A5><strong>Your records:</strong></font> </p>
 
 
@@ -67,45 +68,64 @@
 </table>
 <p><font size=+2 color=#DF01A5><strong>Your current location:</strong></font> </p>
 <div id="allmap"></div>
-<div style="display:inline">
-    <div style="float:left">your location: &nbsp&nbsp</div>
-    <div id="location">location </div>
-    <br />
-</div>
-<div style="display:inline">
-    <div style="float:left">your address: &nbsp&nbsp</div>
-    <div id="address">address </div>
-    <br />
-</div>
-
+</body>
+</html>
 
 <script type="text/javascript">
-	var map = new BMap.Map("allmap");
-	var point = new BMap.Point(116.331398,39.897445);
-	map.centerAndZoom(point,15);
-	var geolocation = new BMap.Geolocation();
-	var gc = new BMap.Geocoder();
-	geolocation.getCurrentPosition(function(r){
-		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-			var mk = new BMap.Marker(r.point);
-			map.addOverlay(mk);
-			map.panTo(r.point);
-			document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
-			gc.getLocation(r.point, function(rs){
+	var map = new BMap.Map("allmap");//创建新的地图
+	var point = new BMap.Point(116.331398,39.897445);//在地图中有一个点
+	map.centerAndZoom(point,16);//尺寸
+	var geolocation = new BMap.Geolocation();//地理位置
+	var gc = new BMap.Geocoder();//位置编码
+	geolocation.getCurrentPosition(function(r)
+	{
+		if(this.getStatus() == BMAP_STATUS_SUCCESS)
+		{
+			var mk = new BMap.Marker(r.point);//标记点
+			map.addOverlay(mk);//添加覆盖层
+			var poiR = 1000//设定poi半径
+			var poiNum = 10//设定poi数量
+			map.addOverlay(new BMap.Circle(r.point,poiR));//画圆
+			map.panTo(r.point);//把定位点转到
+			//document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
+			//地址编码转码，对指定的坐标点进行反地址解析。如果解析成功，则回调函数的参数为GeocoderResult对象，否则回调函数的参数为null。(自 1.1 新增)
+			//POI参数
+			var mOption = {
+			    poiRadius : poiR,
+			    numPois : poiNum
+			}
+			gc.getLocation(r.point, function(rs)
+			{
+			    //GeocoderResult对象里有addressComponments和surroundingPois
                 var addComp = rs.addressComponents;
-                document.getElementById("address").innerHTML =(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                var surPois = rs.surroundingPois;
+                var business = rs.business;
+                //document.getElementById("address").innerHTML =(addComp.province + ", " + addComp.city + ", " +
+                //    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
                 document.getElementById("lng").value = r.point.lng;
                 document.getElementById("lat").value = r.point.lat;
-                document.getElementById("inputLocation").value = (addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-    });
+                document.getElementById("inputLocation").value = (addComp.province + ", " + addComp.city + ", " +
+                    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ", ");
+                //if (surPois.length < 10)
+                //    var maxI = surPois.length;
+                //else
+                //    var maxI = 10;
+                for (var i=0;i<surPois.length;i++)
+                {
+                    if (i==0)
+                        document.getElementById("locationSel").innerHTML += '<input type="radio" checked="checked "name="locationSel value="'
+                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>';
+                    else
+                        document.getElementById("locationSel").innerHTML += '<input type="radio" name="locationSel value="'
+                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>';
+                }
+            }
+            ,mOption);
 		}
 		else {
 			alert('failed'+this.getStatus());
 		}
 	},{enableHighAccuracy: true})
-
-
-
 	//关于状态码
 	//BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
 	//BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
@@ -116,8 +136,15 @@
 	//BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
 	//BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
 	//BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
-</script>
 
-<!DOCTYPE html>
-</body>
-</html>
+	function check()
+	{
+        var flag=0
+        for(i=0; i<info.locationSel.length;i++)
+            if(info.locationSel[i].checked==true)
+            {
+                alert(info.locationSel[i].value)
+                return info.locationSel[i].value;
+            }
+    }
+</script>

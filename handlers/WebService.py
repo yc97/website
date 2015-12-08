@@ -4,6 +4,8 @@ import tornado.web
 import traceback
 from models.Fijibook_MySQLdb import Fijibook_MySQLdb
 from handlers.BaseHandler import BaseHandler
+from VerificationCode import VerificationCode
+import StringIO
 
 class indexHandler(BaseHandler):
     @tornado.web.authenticated
@@ -86,23 +88,46 @@ class loginHandler(tornado.web.RequestHandler):
 
 class registerHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('register.html', info='')
+        self.render('register.html', info='', isCorrect='')
 
     def post(self):
         user = self.get_argument('user')
         passwd = self.get_argument('passwd')
-        rec = Fijibook_MySQLdb().addUser(user, passwd)
-        #print rec
-        if rec['code'] == 0:
-            self.set_secure_cookie("user", user)
-            #self.set_secure_cookie("passwd", passwd, expires_days=None)
-            res = Fijibook_MySQLdb().createUserTable(user)
-            if not res['code']:
-                print("Error creating '%s' table!"%user)
-            self.redirect('/login')
+        verificationCode = self.get_argument('verificationCode')
+        correctCode = self.get_secure_cookie("verificationCode")
+        #print correctCode,verificationCode
+        if verificationCode.upper() != correctCode.upper():
+            self.render('register.html', info='', isCorrect='wrong verification code')
         else:
-            self.render('register.html', info='Unknown error!.')
+            rec = Fijibook_MySQLdb().addUser(user, passwd)
+            #print rec
+            if rec['code'] == 0:
+                self.set_secure_cookie("user", user)
+                #self.set_secure_cookie("passwd", passwd, expires_days=None)
+                # res = Fijibook_MySQLdb().createUserTable(user)
+                # if not res['code']:
+                #     print("Error creating '%s' table!"%user)
+                self.redirect('/index')
+            else:
+                self.render('register.html', info='Unknown error!.', isCorrect='')
 
+class VerificationImgHandler(BaseHandler):
+    def get(self):
+        #get img
+        image, code = VerificationCode().createImg()
+        #save code to cookie
+        self.set_secure_cookie("verificationCode", code)
+        #save to stringio
+        msstream = StringIO.StringIO()
+        image.save(msstream, 'jpeg')
+        #get data from stringio
+        img_data = msstream.getvalue()
+        msstream.close()
+        #set content type
+        self.set_header('Content-type', 'image/jpg')
+        self.set_header('Content-length', len(img_data))
+        #response write
+        self.write(img_data)
 
 class LogoutHandler(BaseHandler):
     def get(self):
@@ -119,3 +144,8 @@ class MapHandler(BaseHandler):
 class JSMapHandler(BaseHandler):
     def get(self):
         self.render('map1.html')
+
+
+class POIHandler(BaseHandler):
+    def get(self):
+        self.render('POI.html')

@@ -13,15 +13,17 @@
 ##      Modification:
 ##   2. ...
 
-from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, JSMapHandler,registerHandler
+from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, \
+    JSMapHandler, registerHandler, POIHandler
 
 urls = [
     ('/', indexHandler),
     ('/login', loginHandler),
     ('/logout', LogoutHandler),
     ('/index', indexHandler),
+    ('/register', registerHandler),
     ('/map', MapHandler),
     ('/jsmap', JSMapHandler),
-    ('/register', registerHandler),
+    ('/poi', POIHandler),
     ]
 
