@@ -13,8 +13,12 @@
 ##      Modification:
 ##   2. ...
 
+
 from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, \
     JSMapHandler, registerHandler, POIHandler
+
+from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, JSMapHandler, registerHandler, VerificationImgHandler
+
 
 urls = [
     ('/', indexHandler),
@@ -25,5 +29,7 @@ urls = [
     ('/map', MapHandler),
     ('/jsmap', JSMapHandler),
     ('/poi', POIHandler),
+    ('/register', registerHandler),
+    ('/verificationimg', VerificationImgHandler),
     ]
 
