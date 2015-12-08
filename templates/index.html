@@ -54,10 +54,10 @@
 </form>
 <form name="locationSel">
 </form>
+<p><font size=+2 color=#DF01A5><strong>Your current location:</strong></font> </p>
+<div id="allmap"></div>
 
 <p><font size=+2 color=#DF01A5><strong>Your records:</strong></font> </p>
-
-
 <table>
     <thead >
     <tr >
@@ -76,8 +76,7 @@
     </tbody>
     {% end %}
 </table>
-<p><font size=+2 color=#DF01A5><strong>Your current location:</strong></font> </p>
-<div id="allmap"></div>
+
 </body>
 </html>
 
@@ -91,13 +90,19 @@
 	{
 		if(this.getStatus() == BMAP_STATUS_SUCCESS)
 		{
-			var mk = new BMap.Marker(r.point);//标记点
-			mk.setTitle('U R here!')
-			map.addOverlay(mk);//添加覆盖层
-			var poiR = 2000//设定poi半径
-			var poiNum = 20//设定poi数量
-			//map.addOverlay(new BMap.Circle(r.point,poiR));//画圆
+		    //添加标记
+		    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25),
+            {
+                offset: new BMap.Size(10, 25),
+                imageOffset: new BMap.Size(0, 0 - 12 * 25)
+            });
+            var mk = new BMap.Marker(r.point, {icon: myIcon});
+            map.addOverlay(mk)
+
+			var poiR = 800//设定poi半径
+			var poiNum = 10//设定poi数量
 			map.panTo(r.point);//把定位点转到
+			//map.addOverlay(new BMap.Circle(r.point,poiR));        //添加一个圆形覆盖物
 			//document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
 			//地址编码转码，对指定的坐标点进行反地址解析。如果解析成功，则回调函数的参数为GeocoderResult对象，否则回调函数的参数为null。(自 1.1 新增)
 			//POI参数
@@ -119,18 +124,26 @@
                     addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ", ")
                 document.getElementById("street").value = locationStreet;
                 document.getElementById("inputLocation").value = locationStreet + surPois[0].title;
-                //if (surPois.length < 10)
-                //    var maxI = surPois.length;
-                //else
-                //    var maxI = 10;
+                if (surPois.length < 10)
+                    var maxI = surPois.length;
+                else
+                    var maxI = 10;
                 for (var i=0;i<surPois.length;i++)
                 {
+                    var title = String.fromCharCode('A'.charCodeAt()+i) + '.' + surPois[i].title;
                     if (i==0)
                         document.locationSel.innerHTML += ('<input type="radio" onClick="check()" checked="checked" name="locationSel" value="'
-                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>');
+                        + surPois[i].title + '"/> ' + title + '<br>');
                     else
                         document.locationSel.innerHTML += ('<input type="radio" onClick="check()" name="locationSel" value="'
-                        + surPois[i].title + '"/> ' + surPois[i].title + '<br>');
+                        + surPois[i].title + '"/> ' + title + '<br>');
+                    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25),
+                    {
+                        offset: new BMap.Size(10, 25),
+                        imageOffset: new BMap.Size(0, 0 - i * 25)
+                    });
+                    var mk1 = new BMap.Marker(surPois[i].point, {icon: myIcon});
+                    map.addOverlay(mk1);
                 }
             }
             ,mOption);

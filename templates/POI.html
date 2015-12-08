@@ -1,47 +1,40 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-	<style type="text/css">
-		body, html{width: 100%;height: 100%; margin:0;font-family:"å¾®è½¯é›…é»‘";}
-		#l-map{height:300px;width:100%;}
-		#r-result{width:100%;}
-	</style>
-	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
-	<title>æœ¬åœ°æœç´¢çš„ç»“æœé¢æ¿</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>ËùÓĞPOIµÄ²éÑ¯-µØÖ·½âÎö</title>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
 </head>
 <body>
-	<div id="l-map"></div>
-	<div id="r-result"></div>
+<input type="button" onclick="displayPOI();" value="È·¶¨" />
+<div style="width:600px;height:340px;border:1px solid gray;float:left;" id="container"></div>
+<div style="width:300px;height:340px;border:1px solid gray;border-left:0;float:left;" id="panel"></div>
 </body>
 </html>
-
 <script type="text/javascript">
-	// ç™¾åº¦åœ°å›¾APIåŠŸèƒ½
-	var map = new BMap.Map("l-map");            // åˆ›å»ºMapå®ä¾‹
-	var point = new BMap.Point(116.331398,39.897445);
-	map.centerAndZoom(point,15);
-	var geolocation = new BMap.Geolocation();
-	var gc = new BMap.Geocoder();
-	geolocation.getCurrentPosition(function(r){
-		if(this.getStatus() == BMAP_STATUS_SUCCESS){
-			var mk = new BMap.Marker(r.point);
-			map.addOverlay(mk);
-			map.panTo(r.point);
-			document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
-			gc.getLocation(r.point, function(rs){
-                var addComp = rs.addressComponents;
-                document.getElementById("address").innerHTML =(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-                document.getElementById("lng").value = r.point.lng;
-                document.getElementById("lat").value = r.point.lat;
-                document.getElementById("inputLocation").value = (addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-    });
-		}
-		else {
-			alert('failed'+this.getStatus());
-		}
-	},{enableHighAccuracy: true})
+var map = new BMap.Map("container");
+var mPoint = new BMap.Point(113.231626, 22.982265);
+map.centerAndZoom(mPoint, 16);
+map.enableScrollWheelZoom();        //ÆôÓÃ¹öÂÖËõ·Å
 
+var mOption = {
+    poiRadius : 500,           //°ë¾¶Îª1000Ã×ÄÚµÄPOI,Ä¬ÈÏ100Ã×
+    numPois : 12                //ÁĞ¾Ù³ö50¸öPOI,Ä¬ÈÏ10¸ö
+}
+
+var myGeo = new BMap.Geocoder();        //´´½¨µØÖ·½âÎöÊµÀı
+function displayPOI(){
+    map.addOverlay(new BMap.Circle(mPoint,500));        //Ìí¼ÓÒ»¸öÔ²ĞÎ¸²¸ÇÎï
+    myGeo.getLocation(mPoint,
+        function mCallback(rs){
+            var allPois = rs.surroundingPois;       //»ñÈ¡È«²¿POI£¨¸Ãµã°ë¾¶Îª100Ã×ÄÚÓĞ6¸öPOIµã£©
+            for(i=0;i<allPois.length;++i){
+                document.getElementById("panel").innerHTML += "<p style='font-size:12px;'>" + (i+1) + "¡¢" + allPois[i].title + ",µØÖ·:" + allPois[i].address + "</p>";
+                map.addOverlay(new BMap.Marker(allPois[i].point));                
+            }
+        },mOption
+    );
+}
 
 
 </script>

@@ -6,12 +6,16 @@ from models.Fijibook_MySQLdb import Fijibook_MySQLdb
 from handlers.BaseHandler import BaseHandler
 from VerificationCode import VerificationCode
 import StringIO
+import datetime
+import sys
 
 class indexHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         #print 'index'
         user = self.get_current_user()
+        print user, 'login at', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        sys.stdout.flush()
         recSumRec = Fijibook_MySQLdb().getUserRecSum(user)
         userSumRec = Fijibook_MySQLdb().getUserSum()
         newTimeRec = Fijibook_MySQLdb().getNewestRecTime(user)
