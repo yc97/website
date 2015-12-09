@@ -112,6 +112,6 @@ class Fijibook_MySQLdb(MySQLDatabase):
 
 if __name__ == '__main__':
     Defaults.config_path = '../config/data.conf'
-    print Fijibook_MySQLdb().addUser('public', 'public')
+    print Fijibook_MySQLdb().addUser('luke', 'jmb12e')
 
 
