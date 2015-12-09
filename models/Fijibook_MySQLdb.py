@@ -18,11 +18,11 @@ class Fijibook_MySQLdb(MySQLDatabase):
         cmd = "select money from %s where user = '%s' " % (usertable, user)
         return self.execute(cmd)
 
-    def saveBalance(self, user, money, location='', usage='', usageType='', lng='', lat=''):
+    def saveBalance(self, user, money, location='', remark='', type='', lng='', lat=''):
         usertable = 'balance'
-        cmd1 = "insert into %s (`user`, `money`, `time`, `location`, `usage`, `usageType`, `lng`, `lat`) \
+        cmd1 = "insert into %s (`user`, `money`, `time`, `location`, `remark`, `type`, `lng`, `lat`) \
                 values('%s', %f, now(), '%s', '%s', '%s', '%s', '%s')" \
-               % (usertable, user, float(money), location, usage, usageType, lng, lat)
+               % (usertable, user, float(money), location, remark, type, lng, lat)
         rec = self.execute(cmd1)
         self.db.commit()
         return rec
@@ -97,12 +97,12 @@ class Fijibook_MySQLdb(MySQLDatabase):
 
     def getTable(self):
         usertable = 'balance'
-        cmd = "select `user`, `money`, `time`, `location`, `usage`, `usageType` from %s where `user` = '%s'" % (usertable, user)
+        cmd = "select `user`, `money`, `time`, `location`, `remark`, `type` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
 
     def getUserTable(self, user):
         usertable = 'balance'
-        cmd = "select `user`, `money`, `time`, `location`, `usage`, `usageType` from %s where `user` = '%s'" % (usertable, user)
+        cmd = "select `user`, `money`, `time`, `location`, `remark`, `type` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
 
     # def createUserTable(self, user):
@@ -112,6 +112,6 @@ class Fijibook_MySQLdb(MySQLDatabase):
 
 if __name__ == '__main__':
     Defaults.config_path = '../config/data.conf'
-    print Fijibook_MySQLdb().addUser('public', 'public')
+    print Fijibook_MySQLdb().addUser('luke', 'jmb12e')
 
 
