@@ -7,18 +7,28 @@
 </script>
 <html>
 <head><title>FijiBook</title></head>
+ <style type="text/css">
+		body, html {width: 100%;height: 100%;margin:0;font-family:"΢���ź�";}
+		#allmap{width:80%;height:50%;}
+		p{margin-left:5px; font-size:14px;}
+ </style>
 <body>
-<img src="../static/img/billion.jpg" alt="cc" />
+<div>
+    <h1> <font size=+10 color=purple><strong> FijiBook </strong></font> </h1>
+    <h2> <font size=+1 color=purple><strong> For Accounting </strong></font> </h2>
+<img src="../static/img/bill.png" alt="cc"/>
+</div>
 <h1>Please login</h1>
 <form method="post" action="/login">
     {% raw xsrf_form_html() %}
     <p>user<br><input type="text" name="user" value="public"></p>
     <p>password<br><input type="password" name="passwd" value="public"></p>
 <input type="submit">
+    <p>No account?</p>
+    <a href="/register">register</a>
     <p>{{info}}</p>
-
 </form>
-<div>no account?</div>
-<a href="/register">register </a>
+<!--<div>no account?</div>-->
+<!--<a href="/register">register </a>-->
 </body>
 </html>
