@@ -6,12 +6,16 @@ from models.Fijibook_MySQLdb import Fijibook_MySQLdb
 from handlers.BaseHandler import BaseHandler
 from VerificationCode import VerificationCode
 import StringIO
+import datetime
+import sys
 
 class indexHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
         #print 'index'
         user = self.get_current_user()
+        print user, 'login at', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        sys.stdout.flush()
         recSumRec = Fijibook_MySQLdb().getUserRecSum(user)
         userSumRec = Fijibook_MySQLdb().getUserSum()
         newTimeRec = Fijibook_MySQLdb().getNewestRecTime(user)
@@ -28,7 +32,7 @@ class indexHandler(BaseHandler):
         else:
             self.render('index.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
-                        thead=['user', 'money', 'time', 'location', 'usage', 'usageType'],
+                        thead=['用户', '金额', '时间', '定位信息', '备注', '账单分类'],
                         tbody=tableRec['result'])
 
     @tornado.web.authenticated
@@ -36,11 +40,14 @@ class indexHandler(BaseHandler):
         user = self.get_secure_cookie('user')
         money = self.get_argument('money')
         location = self.get_argument('inputLocation')
-        usage = self.get_argument('usage')
-        usageType = self.get_argument('usageType')
+        remark = self.get_argument('remark')
+        type = self.get_argument('type')
+        moneySel = self.get_argument('moneySel')
+        if moneySel == 'expenses':
+            money = -float(money)
         lng = self.get_argument('lng')
         lat = self.get_argument('lat')
-        rec = Fijibook_MySQLdb().saveBalance(user=user, money=money, location=location, usage=usage, usageType=usageType, lng=lng, lat=lat)
+        rec = Fijibook_MySQLdb().saveBalance(user=user, money=money, location=location, remark=remark, type=type, lng=lng, lat=lat)
         if rec['code']:
             self.write(rec)
         self.redirect('/index')
@@ -144,3 +151,8 @@ class MapHandler(BaseHandler):
 class JSMapHandler(BaseHandler):
     def get(self):
         self.render('map1.html')
+
+
+class POIHandler(BaseHandler):
+    def get(self):
+        self.render('POI.html')
