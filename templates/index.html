@@ -14,50 +14,49 @@
 <body>
 <div>
     <h1> <font size=+10 color=purple><strong> FijiBook非记不可 </strong></font> </h1>
+    <h2> <font size=+1 color=purple><strong> 带自动定位的记账好帮手 </strong></font> </h2>
 <img src="../static/img/bill.png" alt="cc"/>
 </div>
-    <h1>Hello, <font color=#DF01A5>{{user}}</font></h1>
-<p> Now you have <font size=+2 color=#DF01A5><strong>{{recSum}}</strong></font> records!! </p>
-<p> The latest record is added at <font size=+2 color=#DF01A5><strong>{{newTime}}</strong></font></p>
-<a href="/logout">logout</a>
-<h2>Please enter terms below.</h2>
+    <h2>Hello, <font color=#DF01A5>{{user}}      </font><a href="/logout">登出</a></h2>
+<h2>请输入以下信息：</h2>
 <form name="info" method="post" action="/index">
     {% raw xsrf_form_html() %}
-    <p>金额<br>
+    <p><font color=purple>请输入账单金额（元）</font><br>
         <input type="radio" checked="checked" name="moneySel" value="expenses"/>支出
         <input type="radio" name="moneySel" value="income"/>收入
         <br>
-        <input type="number" step="0.01" name="money" required="required"></p>
-    <p>备注<br><input type="text" name="remark"></p>
-    <p>类型<br><input type="text" name="type"></p>
-    <p>longitude</p>
-    <div style="display:inline">
+        <input type="number" step="0.01" name="money" required="required" value="0.00"></p>
+    <p><font color=purple>备注一下这笔钱吧！</font><br><input type="text" name="remark" value="麦当劳早餐"></p>
+    <p><font color=purple>账单分类（早午晚餐？行车交通？工资？）</font><br><input type="text" name="type" value="早午晚餐"></p>
+    <p><font color=purple>经度</font></p>
+    <div>
         <input type="text" id="lng" name="lng" style="float:left" value="">
     </div>
     <br>
-    <p>latitude</p>
-    <div style="display:inline">
+    <p><font color=purple>纬度</font></p>
+    <div>
         <input type="text" id="lat" name="lat" style="float:left" value="">
     </div>
     <br>
-    <p>street</p>
+    <p><font color=purple>街道</font></p>
     <div>
         <input type="text" id="street" name="street" style="width:400px" value="" >
     </div>
-    <p>location</p>
+    <p><font color=purple>定位信息</font></p>
     <div>
         <input type="text" id="inputLocation" name="inputLocation" style="width:400px" value="" >
     </div>
+    <br>
     <input type="submit" value="非记不可">
     <br>
-    <br>
 </form>
-<form name="locationSel">
-</form>
-<p><font size=+2 color=#DF01A5><strong>Your current location:</strong></font> </p>
+<p><font color=purple>请选择你的具体位置</font></p>
+    <form name="locationSel">
+    </form>
 <div id="allmap"></div>
-
-<p><font size=+2 color=#DF01A5><strong>Your records:</strong></font> </p>
+<p> 现在你有 <font size=+2 color=#DF01A5><strong>{{recSum}}</strong></font> 条记录!! </p>
+<p> 最新的记录的添加时间： <font size=+2 color=#DF01A5><strong>{{newTime}}</strong></font></p>
+<p><font size=+2 color=#DF01A5><strong>你的记录:</strong></font> </p>
 <table>
     <thead >
     <tr >
@@ -99,7 +98,7 @@
             var mk = new BMap.Marker(r.point, {icon: myIcon});
             map.addOverlay(mk)
 
-			var poiR = 800//设定poi半径
+			var poiR = 500//设定poi半径
 			var poiNum = 10//设定poi数量
 			map.panTo(r.point);//把定位点转到
 			//map.addOverlay(new BMap.Circle(r.point,poiR));        //添加一个圆形覆盖物

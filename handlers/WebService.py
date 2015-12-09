@@ -32,7 +32,7 @@ class indexHandler(BaseHandler):
         else:
             self.render('index.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
-                        thead=['user', 'money', 'time', 'location', 'remark', 'type'],
+                        thead=['用户', '金额', '时间', '定位信息', '备注', '账单分类'],
                         tbody=tableRec['result'])
 
     @tornado.web.authenticated
