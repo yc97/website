@@ -20,7 +20,10 @@ class VerificationCode():
         code = ''
         image = Image.new('RGB', (width, height), (255, 255, 255))
 
-        font = ImageFont.truetype('/usr/share/fonts/ARIAL.TTF', 36)
+        #if on server
+        #font = ImageFont.truetype('/usr/share/fonts/Arial.ttf', 36)
+        #if on localhost
+        font = ImageFont.truetype('ARIAL.TTF', 36)
 
         draw = ImageDraw.Draw(image)
 
