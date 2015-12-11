@@ -13,21 +13,40 @@
 	</style>
 <body>
 <div>
-    <h1> <font size=+10 color=purple><strong> FijiBook非记不可 </strong></font> </h1>
-    <h2> <font size=+1 color=purple><strong> 带自动定位的记账好帮手 </strong></font> </h2>
+    <h2> <font size=+10 color=purple><strong> FijiBook非记不可 </strong></font> </h2>
+    <h3> <font size=+1 color=purple><strong> 带自动定位的记账好帮手 </strong></font> </h3>
 <img src="../static/img/bill.png" alt="cc"/>
 </div>
     <h2>Hello, <font color=#DF01A5>{{user}}      </font><a href="/logout">登出</a></h2>
-<h2>请输入以下信息：</h2>
 <form name="info" method="post" action="/index">
     {% raw xsrf_form_html() %}
-    <p><font color=purple>请输入账单金额（元）</font><br>
-        <input type="radio" checked="checked" name="moneySel" value="expenses"/>支出
-        <input type="radio" name="moneySel" value="income"/>收入
-        <br>
-        <input type="number" step="0.01" name="money" required="required" value="0.00"></p>
-    <p><font color=purple>备注一下这笔钱吧！</font><br><input type="text" name="remark" value="麦当劳早餐"></p>
-    <p><font color=purple>账单分类（早午晚餐？行车交通？工资？）</font><br><input type="text" name="type" value="早午晚餐"></p>
+    <p><font color=purple>金额:</font>
+        <br />
+       <input type="number" step="0.01" name="money" required="required" value="0.00">
+    </p>
+    <input id="expense" type="radio" name="moneySel" checked="checked"  onclick="moneySelect()"/>支出
+    <input id="income"  type="radio"  name="moneySel" onclick="moneySelect()"/>收入
+    <br /><br />
+    <div id="expensetypes">
+        {% for k in expensebody %}
+            {% for k1 in k %}
+                <input type="radio"  name="type" value="{{k1}}">{{k1}}
+            {% end %}
+        {% end %}
+    </div>
+    <div id="incometypes" style="display: none">
+        {% for k in incomebody %}
+            {% for k1 in k %}
+                <input type="radio"  name="type" value="{{k1}}">{{k1}}
+            {% end %}
+        {% end %}
+    </div>
+    <p><font color=purple>备注:</font><br /><input type="text" name="remark" value="麦当劳早餐"></p>
+
+    <br>
+    <input type="submit" value="非记不可" style="width:100px;height:30px">
+    <br>
+
     <p><font color=purple>经度</font></p>
     <div>
         <input type="text" id="lng" name="lng" style="float:left" value="">
@@ -46,9 +65,7 @@
     <div>
         <input type="text" id="inputLocation" name="inputLocation" style="width:400px" value="" >
     </div>
-    <br>
-    <input type="submit" value="非记不可" style="width:100px;height:30px">
-    <br>
+
 </form>
 <p><font color=purple>请选择你的具体位置</font></p>
     <form name="locationSel">
@@ -172,4 +189,19 @@
                 break;
             }
     }
+
+    function moneySelect()
+    {
+        if(document.getElementById("expense").checked == true)
+        {
+          document.getElementById("expensetypes").style.display="";
+          document.getElementById("incometypes").style.display="none";
+        }
+        else
+        {
+          document.getElementById("expensetypes").style.display="none";
+          document.getElementById("incometypes").style.display="";
+        }
+    }
+
 </script>

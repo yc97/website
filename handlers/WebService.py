@@ -20,20 +20,22 @@ class indexHandler(BaseHandler):
         userSumRec = Fijibook_MySQLdb().getUserSum()
         newTimeRec = Fijibook_MySQLdb().getNewestRecTime(user)
         tableRec = Fijibook_MySQLdb().getUserTable(user)
+        expenseTypesRec = Fijibook_MySQLdb().getExpenseTypes(user)
+        incomeTypesRec = Fijibook_MySQLdb().getIncomeTypes(user)
         # tableRec = Fijibook_MySQLdb().getTable()
-        if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or tableRec['code']:
-            self.render('index.html', user=user, recSum=-1,
+        if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or tableRec['code'] or expenseTypesRec['code'] or incomeTypesRec['code']:
+            self.render('index.html', user=user, recSum=0,
                         userSum=-1, newTime=-1,
                         thead=['user', 'money', 'time', 'location', 'usage', 'usageType'],
-                        tbody=[])
-            print('Error getting recSum or userSum or newTime or table. \
-            code : [recSum, userSum, newTime, table]'
-                       + str(recSumRec) + str(userSumRec) + str(newTimeRec) + str(tableRec))
+                        tbody=[], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
+            print('Table is empty. Or error getting recSum or userSum or newTime or table. \
+            code : [recSum, userSum, newTime, table, types]'
+                       + str(recSumRec) + str(userSumRec) + str(newTimeRec) + str(tableRec) + str(expenseTypesRec) + str(incomeTypesRec))
         else:
             self.render('index.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
                         thead=['用户', '金额', '时间', '定位信息', '备注', '账单分类'],
-                        tbody=tableRec['result'])
+                        tbody=tableRec['result'], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
 
     @tornado.web.authenticated
     def post(self):
@@ -51,30 +53,6 @@ class indexHandler(BaseHandler):
         if rec['code']:
             self.write(rec)
         self.redirect('/index')
-        # bikeSumRec = Fijibook_MySQLdb().getRecSum()
-        # userSumRec = Fijibook_MySQLdb().getUserSum()
-        # newTimeRec = Fijibook_MySQLdb().getNewestRecTime()
-        # tableRec = Fijibook_MySQLdb().getTable()
-        # if bikeSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or tableRec['code']:
-        #     self.write('Error getting bikeSum or userSum or newTime or table')
-        # else:
-        #     self.render('index.html', user=user, bikeSum=bikeSumRec['result'][0][0],
-        #                 userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
-        #                 thead=['bikeNO', 'passwd', 'addTime', 'user'],
-        #                 tbody=tableRec['result'])
-
-# class passwdHandler(BaseHandler):
-#     @tornado.web.authenticated
-#     def post(self):
-#         bikeNO = self.get_argument('bikeNO')
-#         rec = Fijibook_MySQLdb().getBalance(bikeNO)
-#         if rec['code'] == 0:
-#             passwd = rec['result'][0][0]
-#             self.render('showPasswd.html', bikeNO=bikeNO, password=passwd)
-#         elif rec['code'] == 2:
-#             self.render('inputPasswd.html', bikeNO=bikeNO)
-#         else:
-#             self.write('Error. Sorry.')
 
 class loginHandler(tornado.web.RequestHandler):
     def get(self):

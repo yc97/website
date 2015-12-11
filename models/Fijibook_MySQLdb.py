@@ -109,6 +109,13 @@ class Fijibook_MySQLdb(MySQLDatabase):
     #     usertable = user + '_balance'
     #     cmd = "create table %s like balance" % str(usertable)
     #     return self.execute(cmd)
+    def getExpenseTypes(self, user):
+        cmd = "select `subtype` from type where user in ('all','%s') and inex='expenses'" % (user)
+        return self.execute(cmd)
+
+    def getIncomeTypes(self, user):
+        cmd = "select `subtype` from type where user in ('all','%s') and inex='income'" % (user)
+        return self.execute(cmd)
 
 if __name__ == '__main__':
     Defaults.config_path = '../config/data.conf'
