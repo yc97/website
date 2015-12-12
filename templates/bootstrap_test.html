@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+
+<html lang="zh-CN">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<head>
+    <title>FijiBook 首页</title>
+</head>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
+
+<body>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
+                <a class="navbar-brand" href="#">FijiBook</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/index">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">Nav header</li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Hello,{{user}}</a></li>
+                    <li class="active"><a href="/logout">注销</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <!--<div class="container theme-showcase" role="main">-->
+            <div class="jumbotron">
+                <h1> 非记不可 </h1>
+                <p> 基于地理位置的记账好帮手~</p>
+            </div>
+        <!--</div>-->
+
+        <form name="info" method="post" action="/index">
+            {% raw xsrf_form_html() %}
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-addon">金额:</span>
+                    <input class="form-control" type="number" step="0.01" name="money" required="required" placeholder="0.00" aria-describedby="sizing-addon1">
+                </div>
+            </div>
+            <ul class="nav nav-tabs nav-justified">
+                <li id="navExpense" class="active" role="presentation">
+                    <a href="javascript:expenseSelected()">支出</a>
+                </li>
+                <li id="navIncome" role="presentation">
+                    <a href="javascript:incomeSelected()">收入</a>
+                </li>
+            </ul>
+            <input id="moneySelect" type="hidden" name="moneySel" value="expenses"/>
+            <!--<input id="expense" type="radio" name="moneySel" checked="checked"  onclick="moneySelect()" value="expense"/>支出-->
+            <!--<input id="income"  type="radio"  name="moneySel" onclick="moneySelect()" value="income"/>收入-->
+            <!--<br /><br />-->
+            <div id="expensetypes">
+                <div class="row">
+                    {% for k in expensebody %}
+                        {% for k1 in k %}
+                        <div class="col-md-3">
+                            <h3>
+                                <input class="form-control-lg" type="radio"  name="type" value="{{k1}}">{{k1}}
+                            </h3>
+                        </div>
+                        {% end %}
+                    {% end %}
+                </div>
+            </div>
+            <div id="incometypes" style="display: none">
+                <div class="row">
+                    {% for k in incomebody %}
+                        {% for k1 in k %}
+                            <div class="col-md-3">
+                                <h3>
+                                    <input type="radio"  name="type" value="{{k1}}">{{k1}}
+                               </h3>
+                            </div>
+                        {% end %}
+                    {% end %}
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">备注:</span>
+                            <input class="form-control" type="text"  name="remark"  placeholder="输入这笔钱的详细说明吧！" aria-describedby="sizing-addon1">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <input class="btn btn-lg btn-info btn-group-justified" type="submit" value="非记不可 ">
+                </div>
+            </div>
+            <div class="page-header"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">定位信息</button>
+                        </span>
+                        <input type="hidden" id="street" name="street"  value="" >
+                        <input type="text" id="inputLocation" name="inputLocation" class="form-control" placeholder="Your Location">
+                    </div><!-- /input-group -->
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">经度</button>
+                        </span>
+                        <input type="text" id="lng" name="lng" class="form-control" placeholder="Your Location">
+                    </div><!-- /input-group -->
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">纬度</button>
+                        </span>
+                        <input type="text"  id="lat" name="lat" class="form-control" placeholder="Your Location">
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </form>
+        <br />
+        <!-- 按钮触发模态框 -->
+        <button class="btn btn-info " data-toggle="modal" data-target="#myModal" id="createMap" onclick="javascript:mapCenter()">查看地图</button>
+         <!-- 模态框（Modal） -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+                              <!--&times;-->
+                        <!--</button>-->
+                        <h4 class="modal-title" id="myModalLabel">
+                           当前定位
+                        </h4>
+                     </div>
+                     <div class="modal-body" id="maps" style="height:400px;">
+                        BaiduMap
+                     </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                           data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                           提交更改
+                        </button>
+                     </div>
+                  </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <!--<div id="map_canvas" style="width:535px;height:300px"></div>-->
+        <br /><br />
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">请选择你的具体位置</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <form name="locationSel"></form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="alert alert-info" role="alert">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4> 现在你有  <strong>{{recSum}}</strong>条记录! </h4>
+                </div>
+                <div class="col-md-6">
+                    <h4>  最新的记录的添加时间：<strong>{{newTime}}</strong>  </h4>
+                </div>
+            </div>
+        </div>
+        <h3>
+            <span class="label label-info">你的记录:</span>
+        </h3>
+        <table class="table table-striped">
+            <thead >
+                <tr >
+                    {% for i in thead %}
+                        <th >{{i}}</th>
+                    {% end %}
+                </tr>
+            </thead>
+                {% for j in tbody %}
+                    <tbody>
+                        <tr>
+                            {% for j1 in j %}
+                                <td>{{j1}}</td>
+                            {% end %}
+                        </tr>
+                    </tbody>
+                {% end %}
+        </table>
+    </span>
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	var map = new BMap.Map("maps");//创建新的地图
+	var point = new BMap.Point(116.331398,39.897445);//在地图中有一个点
+	map.centerAndZoom(point,16);//设置中心点和级别
+	var geolocation = new BMap.Geolocation();//地理位置
+	var gc = new BMap.Geocoder();//位置编码
+	geolocation.getCurrentPosition(function(r)
+	{
+		if(this.getStatus() == BMAP_STATUS_SUCCESS)
+		{
+		    //添加标记
+		    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25),
+            {
+                offset: new BMap.Size(10, 25),
+                imageOffset: new BMap.Size(0, 0 - 12 * 25)
+            });
+            var mk = new BMap.Marker(r.point, {icon: myIcon});
+            point = r.point;
+            map.addOverlay(mk)
+
+			var poiR = 500//设定poi半径
+			var poiNum = 10//设定poi数量
+			map.panTo(r.point);//把定位点转到
+			//map.addOverlay(new BMap.Circle(r.point,poiR));        //添加一个圆形覆盖物
+			//document.getElementById("location").innerHTML = r.point.lng+', '+r.point.lat;
+			//地址编码转码，对指定的坐标点进行反地址解析。如果解析成功，则回调函数的参数为GeocoderResult对象，否则回调函数的参数为null。(自 1.1 新增)
+			//POI参数
+			var mOption = {
+			    poiRadius : poiR,
+			    numPois : poiNum
+			}
+			gc.getLocation(r.point, function(rs)
+			{
+			    //GeocoderResult对象里有addressComponments和surroundingPois
+                var addComp = rs.addressComponents;
+                var surPois = rs.surroundingPois;
+                var business = rs.business;
+                //document.getElementById("address").innerHTML =(addComp.province + ", " + addComp.city + ", " +
+                //    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                document.getElementById("lng").value = r.point.lng;
+                document.getElementById("lat").value = r.point.lat;
+                var locationStreet = (addComp.province + ", " + addComp.city + ", " +
+                    addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ", ")
+                document.getElementById("street").value = locationStreet;
+                document.getElementById("inputLocation").value = locationStreet + surPois[0].title;
+                if (surPois.length < 10)
+                    var maxI = surPois.length;
+                else
+                    var maxI = 10;
+                for (var i=0;i<surPois.length;i++)
+                {
+                    var title = String.fromCharCode('A'.charCodeAt()+i) + '.' + surPois[i].title;
+                    if (i==0)
+                        document.locationSel.innerHTML += ('<div class="col-md-4"><h4><input type="radio" onClick="check()" checked="checked" name="locationSel" value="'
+                        + surPois[i].title + '"/> ' + title + '</h4></div>');
+                    else
+                        document.locationSel.innerHTML += ('<div class="col-md-4"><h4><input type="radio" onClick="check()" name="locationSel" value="'
+                        + surPois[i].title + '"/> ' + title + '</h4></div>');
+                    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25),
+                    {
+                        offset: new BMap.Size(10, 25),
+                        imageOffset: new BMap.Size(0, 0 - i * 25)
+                    });
+                    var mk1 = new BMap.Marker(surPois[i].point, {icon: myIcon});
+                    map.addOverlay(mk1);
+                }
+            }
+            ,mOption);
+		}
+		else {
+			alert('failed'+this.getStatus());
+		}
+	},{enableHighAccuracy: true})
+	//关于状态码
+	//BMAP_STATUS_SUCCESS	检索成功。对应数值“0”。
+	//BMAP_STATUS_CITY_LIST	城市列表。对应数值“1”。
+	//BMAP_STATUS_UNKNOWN_LOCATION	位置结果未知。对应数值“2”。
+	//BMAP_STATUS_UNKNOWN_ROUTE	导航结果未知。对应数值“3”。
+	//BMAP_STATUS_INVALID_KEY	非法密钥。对应数值“4”。
+	//BMAP_STATUS_INVALID_REQUEST	非法请求。对应数值“5”。
+	//BMAP_STATUS_PERMISSION_DENIED	没有权限。对应数值“6”。(自 1.1 新增)
+	//BMAP_STATUS_SERVICE_UNAVAILABLE	服务不可用。对应数值“7”。(自 1.1 新增)
+	//BMAP_STATUS_TIMEOUT	超时。对应数值“8”。(自 1.1 新增)
+
+    //modal加载时map自动到中心点
+    $('#myModal').on('shown.bs.modal', function () {
+        map.centerAndZoom(point,16);
+    })
+
+	function check()
+	{
+        var flag=0;
+        for(i=0; i<document.locationSel.length;i++)
+            if(document.locationSel[i].checked==true)
+            {
+                document.info.inputLocation.value = document.info.street.value + document.locationSel[i].value;
+                break;
+            }
+    }
+
+    function expenseSelected()
+    {
+          document.getElementById("expensetypes").style.display="";
+          document.getElementById("incometypes").style.display="none";
+          //document.getElementById("navExpense").class = "active"
+          //document.getElementById("navIncome").class = ""
+          document.getElementById("moneySelect").value = "expenses"
+    }
+    function incomeSelected()
+    {
+          document.getElementById("expensetypes").style.display="none";
+          document.getElementById("incometypes").style.display="";
+          //document.getElementById("navExpense").class=""
+          //document.getElementById("navIncome").class="active"
+          document.getElementById("moneySelect").value = "income"
+    }
+
+
+</script>

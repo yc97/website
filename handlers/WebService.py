@@ -24,7 +24,7 @@ class indexHandler(BaseHandler):
         incomeTypesRec = Fijibook_MySQLdb().getIncomeTypes(user)
         # tableRec = Fijibook_MySQLdb().getTable()
         if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or tableRec['code'] or expenseTypesRec['code'] or incomeTypesRec['code']:
-            self.render('index.html', user=user, recSum=0,
+            self.render('bootstrap_test.html', user=user, recSum=0,
                         userSum=-1, newTime=-1,
                         thead=['user', 'money', 'time', 'location', 'usage', 'usageType'],
                         tbody=[], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
@@ -32,7 +32,7 @@ class indexHandler(BaseHandler):
             code : [recSum, userSum, newTime, table, types]'
                        + str(recSumRec) + str(userSumRec) + str(newTimeRec) + str(tableRec) + str(expenseTypesRec) + str(incomeTypesRec))
         else:
-            self.render('index.html', user=user, recSum=recSumRec['result'][0][0],
+            self.render('bootstrap_test.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
                         thead=['用户', '金额', '时间', '定位信息', '备注', '账单分类'],
                         tbody=tableRec['result'], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
