@@ -18,20 +18,20 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/index">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li class="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                        </ul>
-                    </li>
+                    <!--<li><a href="#about">About</a></li>-->
+                    <!--<li><a href="#contact">Contact</a></li>-->
+                    <!--<li class="dropdown">-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
+                        <!--<ul class="dropdown-menu">-->
+                            <!--<li><a href="#">Action</a></li>-->
+                            <!--<li role="separator" class="divider"></li>-->
+                            <!--<li class="dropdown-header">Nav header</li>-->
+                            <!--<li><a href="#">Separated link</a></li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Hello,{{user}}</a></li>
+                    <li><a href="#user">Hello,{{user}}</a></li>
                     <li class="active"><a href="/logout">注销</a></li>
                 </ul>
             </div>
@@ -39,130 +39,120 @@
     </nav>
     <div class="container">
         <!--<div class="container theme-showcase" role="main">-->
-            <div class="jumbotron">
-                <h1> 非记不可 </h1>
-                <p> 基于地理位置的记账好帮手~</p>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="jumbotron">
+                    <h1> 非记不可 </h1>
+                    <p> 基于地理位置的记账好帮手~</p>
+                </div>
             </div>
+        </div>
         <!--</div>-->
-
-        <form name="info" method="post" action="/index">
-            {% raw xsrf_form_html() %}
-            <div class="form-group">
-                <div class="input-group input-group-lg">
-                    <span class="input-group-addon">金额:</span>
-                    <input class="form-control" type="number" step="0.01" name="money" required="required" placeholder="0.00" aria-describedby="sizing-addon1">
-                </div>
-            </div>
-            <ul class="nav nav-tabs nav-justified">
-                <li id="navExpense" class="active" role="presentation">
-                    <a href="javascript:expenseSelected()">支出</a>
-                </li>
-                <li id="navIncome" role="presentation">
-                    <a href="javascript:incomeSelected()">收入</a>
-                </li>
-            </ul>
-            <input id="moneySelect" type="hidden" name="moneySel" value="expenses"/>
-            <!--<input id="expense" type="radio" name="moneySel" checked="checked"  onclick="moneySelect()" value="expense"/>支出-->
-            <!--<input id="income"  type="radio"  name="moneySel" onclick="moneySelect()" value="income"/>收入-->
-            <!--<br /><br />-->
-            <div id="expensetypes">
-                <div class="row">
-                    {% for k in expensebody %}
-                        {% for k1 in k %}
-                        <div class="col-md-3">
-                            <h3>
-                                <input class="form-control-lg" type="radio"  name="type" value="{{k1}}">{{k1}}
-                            </h3>
-                        </div>
-                        {% end %}
-                    {% end %}
-                </div>
-            </div>
-            <div id="incometypes" style="display: none">
-                <div class="row">
-                    {% for k in incomebody %}
-                        {% for k1 in k %}
-                            <div class="col-md-3">
-                                <h3>
-                                    <input type="radio"  name="type" value="{{k1}}">{{k1}}
-                               </h3>
-                            </div>
-                        {% end %}
-                    {% end %}
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-addon">备注:</span>
-                            <input class="form-control" type="text"  name="remark"  placeholder="输入这笔钱的详细说明吧！" aria-describedby="sizing-addon1">
-                        </div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <form name="info" method="post" action="/index">
+                {% raw xsrf_form_html() %}
+                <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon">金额:</span>
+                        <input class="form-control" type="number" step="0.01" name="money" required="required" placeholder="0.00" aria-describedby="sizing-addon1">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <input class="btn btn-lg btn-info btn-group-justified" type="submit" value="非记不可 ">
+                <!--<div class="col-md-12 col-xs-12">-->
+                    <ul class="nav nav-tabs ">
+                        <li id="navExpense" class="active" role="presentation">
+                            <a href="#expensetypes" data-toggle="tab" name="expenses"><p>支出</p></a>
+                        </li>
+                        <li id="navIncome" role="presentation">
+                            <a href="#incometypes" data-toggle="tab" name="income"><p>收入</p></a>
+                        </li>
+                    </ul>
+                <!--</div>-->
+                <input id="moneySelect" type="hidden" name="moneySel" value="expenses"/>
+                <div id="myTabContent" class="tab-content">
+                   <div class="tab-pane fade in active" id="expensetypes">
+                       <div class="row">
+                           <div class="col-md-12"><br />
+                               <div class="btn-group" data-toggle="buttons">
+                                   {% for k in expensebody %}
+                                        {% for k1 in k %}
+                                                <div class="col-md-3 col-xs-6">
+                                                    <!--<h3>-->
+                                                        <label class="btn btn-default btn-group-justified">
+                                                            <p><input type="radio"  name="type" value="{{k1}}" autocomplete="off" required="required">{{k1}}</p>
+                                                        </label>
+                                                    <!--</h3>-->
+                                                </div>
+                                        {% end %}
+                                    {% end %}
+                               </div>
+                           </div>
+                        </div>
+                   </div>
+                   <div class="tab-pane fade" id="incometypes">
+                        <div class="row">
+                           <div class="col-md-12 "><br />
+                               <div class="btn-group" data-toggle="buttons">
+                                   {% for k in incomebody %}
+                                        {% for k1 in k %}
+                                            <div class="col-md-3 col-xs-6">
+                                                <!--<h3>-->
+                                                    <label class="btn btn-default btn-group-justified">
+                                                        <p><input type="radio"  name="type" value="{{k1}}" autocomplete="off" required="required">{{k1}}</p>
+                                                    </label>
+                                                <!--</h3>-->
+                                            </div>
+                                        {% end %}
+                                    {% end %}
+                               </div>
+                           </div>
+                        </div>
+                   </div>
                 </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">备注:</span>
+                                <input class="form-control" type="text"  name="remark"  placeholder="Details！" aria-describedby="sizing-addon1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <input class="btn btn-lg btn-info btn-group-justified" type="submit" value="非记不可 ">
+                    </div>
+                </div>
+                <div class="page-header"></div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">定位:</span>
+                            <input type="hidden" id="street" name="street"  value="" >
+                            <input type="text" id="inputLocation" name="inputLocation" class="form-control" placeholder="Your Location">
+                        </div><!-- /input-group -->
+                    </div>
+                    <div class="col-md-3 col-xs-6">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">经度:</span>
+                            <input type="text" id="lng" name="lng" class="form-control" placeholder="Your Location">
+                        </div><!-- /input-group -->
+                    </div>
+                    <div class="col-md-3 col-xs-6">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">经度:</span>
+                            <input type="text"  id="lat" name="lat" class="form-control" placeholder="Your Location">
+                        </div><!-- /input-group -->
+                    </div>
+                </div>
+            </form>
             </div>
-            <div class="page-header"></div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">定位信息</button>
-                        </span>
-                        <input type="hidden" id="street" name="street"  value="" >
-                        <input type="text" id="inputLocation" name="inputLocation" class="form-control" placeholder="Your Location">
-                    </div><!-- /input-group -->
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">经度</button>
-                        </span>
-                        <input type="text" id="lng" name="lng" class="form-control" placeholder="Your Location">
-                    </div><!-- /input-group -->
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">纬度</button>
-                        </span>
-                        <input type="text"  id="lat" name="lat" class="form-control" placeholder="Your Location">
-                    </div><!-- /input-group -->
-                </div>
-            </div>
-        </form>
+        </div>
         <br />
         <!-- 按钮触发模态框 -->
         <button class="btn btn-info " data-toggle="modal" data-target="#myModal" id="createMap" onclick="javascript:mapCenter()">查看地图</button>
-         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
-                              <!--&times;-->
-                        <!--</button>-->
-                        <h4 class="modal-title" id="myModalLabel">
-                           当前定位
-                        </h4>
-                     </div>
-                     <div class="modal-body" id="maps" style="height:400px;">
-                        BaiduMap
-                     </div>
-                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
-                           data-dismiss="modal">关闭
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                           提交更改
-                        </button>
-                     </div>
-                  </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
+
         <!--<div id="map_canvas" style="width:535px;height:300px"></div>-->
         <br /><br />
         <div class="panel panel-info">
@@ -176,15 +166,13 @@
             </div>
         </div>
 
-
-
         <div class="alert alert-info" role="alert">
             <div class="row">
-                <div class="col-md-4">
-                    <h4> 现在你有  <strong>{{recSum}}</strong>条记录! </h4>
+                <div class="col-md-4 col-md-12">
+                    <h4> 现在你有  <mark>{{recSum}}</mark>条记录! </h4>
                 </div>
-                <div class="col-md-6">
-                    <h4>  最新的记录的添加时间：<strong>{{newTime}}</strong>  </h4>
+                <div class="col-md-6 col-xs-6">
+                    <h4>  最新的记录的添加时间：<mark>{{newTime}}</mark>  </h4>
                 </div>
             </div>
         </div>
@@ -211,7 +199,30 @@
         </table>
     </span>
 </div>
-
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+                              <!--&times;-->
+                        <!--</button>-->
+                        <p class="modal-title" id="myModalLabel">
+                           当前定位
+                        </p>
+                     </div>
+                     <div class="modal-body" id="maps" style="height:300px;">
+                        BaiduMap
+                     </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <!--<button type="button" class="btn btn-primary">-->
+                           <!--提交更改-->
+                        <!--</button>-->
+                     </div>
+                  </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
@@ -271,10 +282,10 @@
                 {
                     var title = String.fromCharCode('A'.charCodeAt()+i) + '.' + surPois[i].title;
                     if (i==0)
-                        document.locationSel.innerHTML += ('<div class="col-md-4"><h4><input type="radio" onClick="check()" checked="checked" name="locationSel" value="'
+                        document.locationSel.innerHTML += ('<div class="col-md-4 col-xs-12"><h4><input type="radio" onClick="check()" checked="checked" name="locationSel" value="'
                         + surPois[i].title + '"/> ' + title + '</h4></div>');
                     else
-                        document.locationSel.innerHTML += ('<div class="col-md-4"><h4><input type="radio" onClick="check()" name="locationSel" value="'
+                        document.locationSel.innerHTML += ('<div class="col-md-4 col-xs-12"><h4><input type="radio" onClick="check()" name="locationSel" value="'
                         + surPois[i].title + '"/> ' + title + '</h4></div>');
                     var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25),
                     {
@@ -318,22 +329,17 @@
             }
     }
 
-    function expenseSelected()
-    {
-          document.getElementById("expensetypes").style.display="";
-          document.getElementById("incometypes").style.display="none";
-          //document.getElementById("navExpense").class = "active"
-          //document.getElementById("navIncome").class = ""
-          document.getElementById("moneySelect").value = "expenses"
-    }
-    function incomeSelected()
-    {
-          document.getElementById("expensetypes").style.display="none";
-          document.getElementById("incometypes").style.display="";
-          //document.getElementById("navExpense").class=""
-          //document.getElementById("navIncome").class="active"
-          document.getElementById("moneySelect").value = "income"
-    }
+   $(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+          // 获取已激活的标签页的名称
+          var activeTabName = $(e.target).name;
+          document.getElementById("moneySelect").value = activeTabName;
+          // 获取前一个激活的标签页的名称
+          //var previousTab = $(e.relatedTarget).text();
+          //$(".active-tab span").html(activeTab);
+         // $(".previous-tab span").html(previousTab);
+      });
+   });
 
 
 </script>
