@@ -25,19 +25,25 @@ class indexHandler(BaseHandler):
         expenseTypesRec = Fijibook_MySQLdb().getExpenseTypes(user)
         incomeTypesRec = Fijibook_MySQLdb().getIncomeTypes(user)
         # tableRec = Fijibook_MySQLdb().getTable()
-        if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or tableRec['code'] or expenseTypesRec['code'] or incomeTypesRec['code']:
+        if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or expenseTypesRec['code'] or incomeTypesRec['code']:
             self.render('bootstrap_test.html', user=user, recSum=0,
                         userSum=-1, newTime=-1,
-                        thead=['user', 'money', 'time', 'location', 'usage', 'usageType'],
+                        thead=['时间', '位置', '金额',  '账单分类', '备注'],
                         tbody=[], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
             print('Table is empty. Or error getting recSum or userSum or newTime or table. \
             code : [recSum, userSum, newTime, table, types]'
                        + str(recSumRec) + str(userSumRec) + str(newTimeRec) + str(tableRec) + str(expenseTypesRec) + str(incomeTypesRec))
         else:
+            try:
+                tbody = tableRec['result']
+            except KeyError:
+                tbody = (('No record. Please add ', ' ', ' ', ' ', ' '), ' ')
             self.render('bootstrap_test.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
                         thead=['时间', '位置', '金额',  '账单分类', '备注'],
-                        tbody=tableRec['result'], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
+                        tbody=tbody,
+                        expensebody=expenseTypesRec['result'],
+                        incomebody=incomeTypesRec['result'])
 
     @tornado.web.authenticated
     def post(self):
@@ -141,12 +147,15 @@ class RecordHandler(tornado.web.RequestHandler):
     def get(self):
         mydate = self.get_argument('myDate')
         user = self.get_argument('user')
-        print mydate, user
-        record = Fijibook_MySQLdb().getRecord(user, mydate)
-
-        for i in record['result']:
-            for k in i:
-                print k
+        # print mydate, user
+        recordRec = Fijibook_MySQLdb().getRecord(user, mydate)
+        try:
+            record = recordRec['result']
+        except KeyError:
+            record = (('No record. Please add ', ' ', ' ', ' ', ' '), (' ', ' ', ' ', ' ', ' '))
+        # for i in record['result']:
+        #     for k in i:
+        #         print k
 
         recordJson = json.dumps(record)
         self.write(recordJson)

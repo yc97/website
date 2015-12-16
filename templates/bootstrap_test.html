@@ -204,49 +204,108 @@
             </form>
             </div>
         </div>
-
-        <div class="alert alert-warning" role="alert">
-            <div class="row">
+        <div class="row">
+            <div class="alert alert-warning" role="alert">
                 <div class="col-md-4 col-md-12">
-                    <h4> 现在你有  <mark>{{recSum}}</mark>条记录! </h4>
+                    <p> 现在你有  <mark>{{recSum}}</mark>条记录! </p>
                 </div>
-                <div class="col-md-6 col-xs-6">
-                    <h4>  最新的记录的添加时间：<mark>{{newTime}}</mark>  </h4>
+                <div class="col-md-6 col-xs-12">
+                    <p>  最新的记录的添加时间：<mark>{{newTime}}</mark>  </p>
                 </div>
             </div>
         </div>
 
-        <form action="" class="form-horizontal"  role="form">
-            <fieldset>
-                <div class="form-group">
-                    <div class="input-group date form_date col-md-4 col-xs-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                        <input id="dateSel" class="form-control" type="text" value="" readonly>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                    </div>
-                    <input type="hidden" id="dtp_input2" value="" /><br/>
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    选择日期
+                </button>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <input type="text" id="mirror_field" value="" readonly />
+            </div>
+             <div class="col-md-12 col-xs-12">
+                <!-- 模态框（Modal） -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                   <div class="modal-dialog">
+                      <div class="modal-content">
+                         <div class="modal-header">
+                            <button type="button" class="close"
+                               data-dismiss="modal" aria-hidden="true">
+                                  &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                               选择日期
+                            </h4>
+                         </div>
+                         <div class="modal-body">
+                            <form action="" class="form-horizontal"  role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="input-group date form_date col-md-8 col-xs-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <input id="dateSel" class="form-control" type="text" value="" readonly>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                    <input type="hidden" id="dtp_input2" value="" /><br/>
+                                </div>
+                            </fieldset>
+                        </form>
+                         </div>
+                         <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                               data-dismiss="modal">关闭
+                            </button>
+                            <!--<button type="button" class="btn btn-primary">-->
+                               <!--提交更改-->
+                            <!--</button>-->
+                         </div>
+                      </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
                 </div>
-            </fieldset>
-        </form>
+             </div>
 
-        <table class="table table-striped">
-            <thead >
-                <tr >
-                    {% for i in thead %}
-                        <th >{{i}}</th>
-                    {% end %}
-                </tr>
-            </thead>
-                {% for j in tbody %}
-                    <tbody id="recordsTb">
-                        <tr>
-                            {% for j1 in j %}
-                                <td>{{j1}}</td>
+        </div>
+        <!--<div class="row">-->
+            <!--<div class="col-md-12 col-xs-12">-->
+                <!--<form action="" class="form-horizontal"  role="form">-->
+                    <!--<fieldset>-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="input-group date form_date col-md-4 col-xs-8" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">-->
+                                <!--<input id="dateSel" class="form-control" type="text" value="" readonly>-->
+                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>-->
+                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>-->
+                            <!--</div>-->
+                            <!--<input type="hidden" id="dtp_input2" value="" /><br/>-->
+                        <!--</div>-->
+                    <!--</fieldset>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+
+         <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <table class="table table-striped">
+                    <thead >
+                        <tr >
+                            {% for i in thead %}
+                                <th >{{i}}</th>
                             {% end %}
                         </tr>
-                    </tbody>
-                {% end %}
-        </table>
+                    </thead>
+                        {% for j in tbody %}
+                            <tbody id="recordsTb">
+                                <tr>
+                                    {% for j1 in j %}
+                                        <td>{{j1}}</td>
+                                    {% end %}
+                                </tr>
+                            </tbody>
+                        {% end %}
+                </table>
+            </div>
+         </div>
+
         <br />
         <br />
         <br />
@@ -263,7 +322,7 @@
   $(document).ready(function(){
     var myDate = new Date();
     today=myDate.toLocaleDateString();
-    console.info("today:",today);
+    //console.info("today:",today);
     $('.form_date').datetimepicker({
         format: "yyyy-mm-dd",
         language:  'zh-CN',
@@ -274,21 +333,23 @@
 		startView: 2,
 		minView: 2,
 		forceParse: 0,
-		endDate: today
+		endDate: today,
+		pickerPosition: "bottom-left",
+		linkField: "mirror_field",
+        linkFormat: "yyyy-mm-dd"
     });
 
     $('.form_date').datetimepicker().on('changeDate', function(ev){
         $("#recordsTb tr").remove();
         user=$("a#user").text();
-        console.info("user:",user);
+        //console.info("user:",user);
         strdate = $("input#dateSel").val();
-        console.info("strdate:",strdate);
-        $.getJSON("/record",{user:user,myDate:strdate},function(result){
-            var records = result['result'];
-                $.each(records,function(i,record){
-                    var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4']+"</td></tr>";
-                    $("#recordsTb").append(newRow);
-                });
+        //console.info("strdate:",strdate);
+        $.getJSON("/record",{user:user,myDate:strdate},function(records){
+            $.each(records,function(i,record){
+                var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4']+"</td></tr>";
+                $("#recordsTb").append(newRow);
+            });
         });
     });
   });
