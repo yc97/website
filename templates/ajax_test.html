@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js">
+    <meta charset="UTF-8">
+    <title>ajax-test</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    $.getJSON("demo_ajax_json.js",function(result){
+      $.each(result, function(i, field){
+        $("div").append(field + " ");
+      });
+    });
+  });
+});
+</script>

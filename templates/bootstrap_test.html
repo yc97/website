@@ -3,6 +3,7 @@
 
 <html lang="zh-CN">
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link href="../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <head>
     <title>FijiBook 首页</title>
 </head>
@@ -31,7 +32,7 @@
                     <!--</li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#user">Hello,{{user}}</a></li>
+                    <li><a id="user" href="#user">{{user}}</a></li>
                     <li class="active"><a href="/logout">注销</a></li>
                 </ul>
             </div>
@@ -69,12 +70,13 @@
                     </ul>
                 <!--</div>-->
                 <input id="moneySelect" type="hidden" name="moneySel" value="expenses"/>
+
                 <div id="myTabContent" class="tab-content">
                    <div class="tab-pane in active" id="expensetypes">
                        <div class="row">
                            <div class="col-md-12"><br />
                                <div class="btn-group" data-toggle="buttons">
-                                   {% for k in expensebody %}
+                                    {% for k in expensebody[0:12] %}
                                         {% for k1 in k %}
                                                 <div class="col-md-3 col-xs-6">
                                                     <!--<h3>-->
@@ -89,6 +91,22 @@
                                                 </div>
                                         {% end %}
                                     {% end %}
+                                   <div id="moreTypes" class="collapse fade">
+                                       {% for k in expensebody[12:] %}
+                                        {% for k1 in k %}
+                                                <div class="col-md-3 col-xs-6">
+                                                    <!--<h3>-->
+                                                        <label class="btn btn-default btn-group-justified">
+                                                            <input type="radio"  name="type" value="{{k1}}" autocomplete="off" required="required">{{k1}}
+                                                        </label>
+                                                    <!--</h3>-->
+                                                </div>
+                                        {% end %}
+                                    {% end %}
+                                   </div>
+                               </div>
+                               <div class="col-md-12"><br />
+                                   <button id="moreTypeBtn" type="button" class="btn btn-default btn-group-justified" data-toggle="collapse" data-target="#moreTypes">更多分类</button>
                                </div>
                            </div>
                         </div>
@@ -117,6 +135,8 @@
                         </div>
                    </div>
                 </div>
+
+
                 <br />
                 <!--<div class="page-header"></div>-->
                 <div class="row">
@@ -185,9 +205,6 @@
             </div>
         </div>
 
-
-
-
         <div class="alert alert-warning" role="alert">
             <div class="row">
                 <div class="col-md-4 col-md-12">
@@ -198,9 +215,20 @@
                 </div>
             </div>
         </div>
-        <h3>
-            <span class="label label-info">你的记录:</span>
-        </h3>
+
+        <form action="" class="form-horizontal"  role="form">
+            <fieldset>
+                <div class="form-group">
+                    <div class="input-group date form_date col-md-4 col-xs-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                        <input id="dateSel" class="form-control" type="text" value="" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <input type="hidden" id="dtp_input2" value="" /><br/>
+                </div>
+            </fieldset>
+        </form>
+
         <table class="table table-striped">
             <thead >
                 <tr >
@@ -210,7 +238,7 @@
                 </tr>
             </thead>
                 {% for j in tbody %}
-                    <tbody>
+                    <tbody id="recordsTb">
                         <tr>
                             {% for j1 in j %}
                                 <td>{{j1}}</td>
@@ -219,13 +247,53 @@
                     </tbody>
                 {% end %}
         </table>
+        <br />
+        <br />
+        <br />
 </div>
 
 <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 </body>
 </html>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var myDate = new Date();
+    today=myDate.toLocaleDateString();
+    console.info("today:",today);
+    $('.form_date').datetimepicker({
+        format: "yyyy-mm-dd",
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		minView: 2,
+		forceParse: 0,
+		endDate: today
+    });
+
+    $('.form_date').datetimepicker().on('changeDate', function(ev){
+        $("#recordsTb tr").remove();
+        user=$("a#user").text();
+        console.info("user:",user);
+        strdate = $("input#dateSel").val();
+        console.info("strdate:",strdate);
+        $.getJSON("/record",{user:user,myDate:strdate},function(result){
+            var records = result['result'];
+                $.each(records,function(i,record){
+                    var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4']+"</td></tr>";
+                    $("#recordsTb").append(newRow);
+                });
+        });
+    });
+  });
+
+</script>
 
 <script type="text/javascript">
 	var map = new BMap.Map("maps");//创建新的地图
@@ -357,6 +425,12 @@
           //$(".active-tab span").html(activeTab);
          // $(".previous-tab span").html(previousTab);
       });
+
+       $('#moreTypes').on('shown.bs.collapse', function () {
+         document.getElementById("moreTypeBtn").innerHTML = "收起";})
+
+       $('#moreTypes').on('hidden.bs.collapse', function () {
+         document.getElementById("moreTypeBtn").innerHTML = "更多分类";})
    });
 
 

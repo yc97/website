@@ -8,6 +8,7 @@ from VerificationCode import VerificationCode
 import StringIO
 import datetime
 import sys
+import json
 
 class indexHandler(BaseHandler):
     @tornado.web.authenticated
@@ -16,10 +17,11 @@ class indexHandler(BaseHandler):
         user = self.get_current_user()
         print user, 'login at', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         sys.stdout.flush()
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
         recSumRec = Fijibook_MySQLdb().getUserRecSum(user)
         userSumRec = Fijibook_MySQLdb().getUserSum()
         newTimeRec = Fijibook_MySQLdb().getNewestRecTime(user)
-        tableRec = Fijibook_MySQLdb().getUserTable(user)
+        tableRec = Fijibook_MySQLdb().getRecord(user, today)
         expenseTypesRec = Fijibook_MySQLdb().getExpenseTypes(user)
         incomeTypesRec = Fijibook_MySQLdb().getIncomeTypes(user)
         # tableRec = Fijibook_MySQLdb().getTable()
@@ -34,7 +36,7 @@ class indexHandler(BaseHandler):
         else:
             self.render('bootstrap_test.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
-                        thead=['用户', '金额', '时间', '定位信息', '备注', '账单分类'],
+                        thead=['时间', '位置', '金额',  '账单分类', '备注'],
                         tbody=tableRec['result'], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
 
     @tornado.web.authenticated
@@ -134,3 +136,17 @@ class JSMapHandler(BaseHandler):
 class POIHandler(BaseHandler):
     def get(self):
         self.render('POI.html')
+
+class RecordHandler(tornado.web.RequestHandler):
+    def get(self):
+        mydate = self.get_argument('myDate')
+        user = self.get_argument('user')
+        print mydate, user
+        record = Fijibook_MySQLdb().getRecord(user, mydate)
+
+        for i in record['result']:
+            for k in i:
+                print k
+
+        recordJson = json.dumps(record)
+        self.write(recordJson)

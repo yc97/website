@@ -97,12 +97,12 @@ class Fijibook_MySQLdb(MySQLDatabase):
 
     def getTable(self):
         usertable = 'balance'
-        cmd = "select `user`, `money`, `time`, `location`, `remark`, `type` from %s where `user` = '%s'" % (usertable, user)
+        cmd = "select  `time`, `location`,`money`, `type` ,`remark` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
 
     def getUserTable(self, user):
         usertable = 'balance'
-        cmd = "select `user`, `money`, `time`, `location`, `remark`, `type` from %s where `user` = '%s'" % (usertable, user)
+        cmd = "select `time`, `location`,`money`, `type` ,`remark` from %s where `user` = '%s'" % (usertable, user)
         return self.execute(cmd)
 
     # def createUserTable(self, user):
@@ -115,6 +115,12 @@ class Fijibook_MySQLdb(MySQLDatabase):
 
     def getIncomeTypes(self, user):
         cmd = "select `subtype` from type where user in ('all','%s') and inex='income'" % (user)
+        return self.execute(cmd)
+
+    def getRecord(self, user, mydate):
+        # dateAfter=mydate
+        cmd = "SELECT DATE_FORMAT(TIME,'%%T') time24,location,money,TYPE,remark FROM balance " \
+              "WHERE `TIME` >= '%s 00:00:00'AND `TIME` < DATE_ADD('%s',INTERVAL '1' day) AND `user` ='%s' ORDER BY TIME ASC "% (mydate, mydate, user)
         return self.execute(cmd)
 
 if __name__ == '__main__':
