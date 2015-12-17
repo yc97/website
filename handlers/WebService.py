@@ -28,7 +28,7 @@ class indexHandler(BaseHandler):
         if recSumRec['code'] or userSumRec['code'] or newTimeRec['code'] or expenseTypesRec['code'] or incomeTypesRec['code']:
             self.render('bootstrap_test.html', user=user, recSum=0,
                         userSum=-1, newTime=-1,
-                        thead=['时间', '位置', '金额',  '账单分类', '备注'],
+                        thead=['时间', '位置', '金额',  '账单分类', '备注'],today=today,
                         tbody=[], expensebody=expenseTypesRec['result'], incomebody=incomeTypesRec['result'])
             print('Table is empty. Or error getting recSum or userSum or newTime or table. \
             code : [recSum, userSum, newTime, table, types]'
@@ -40,6 +40,7 @@ class indexHandler(BaseHandler):
                 tbody = (('No record. Please add ', ' ', ' ', ' ', ' '), ' ')
             self.render('bootstrap_test.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
+                        today=today,
                         thead=['时间', '位置', '金额',  '账单分类', '备注'],
                         tbody=tbody,
                         expensebody=expenseTypesRec['result'],

@@ -155,7 +155,7 @@
                     </div>
                     <div class="col-md-3 col-xs-6">
                         <div class="input-group input-group-sm">
-                            <span class="input-group-addon">经度:</span>
+                            <span class="input-group-addon">纬度:</span>
                             <input type="text"  id="lat" name="lat" class="form-control" placeholder="Your Location">
                         </div><!-- /input-group -->
                     </div>
@@ -167,7 +167,7 @@
                             <div class="panel-heading" role="tab" id="headingOne">
                                 <h4 class="panel-title">
                                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        请选择你的具体位置
+                                        切换位置
                                     </a>
                                 </h4>
                             </div>
@@ -204,27 +204,40 @@
             </form>
             </div>
         </div>
-        <div class="row">
-            <div class="alert alert-warning" role="alert">
+        <div class="row" style="display:none">
+            <!--<div class="alert alert-warning" role="alert">-->
                 <div class="col-md-4 col-md-12">
                     <p> 现在你有  <mark>{{recSum}}</mark>条记录! </p>
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <p>  最新的记录的添加时间：<mark>{{newTime}}</mark>  </p>
                 </div>
-            </div>
+            <!--</div>-->
         </div>
-
+        <br /><br />
         <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                    选择日期
-                </button>
+            <div class="col-md-4 col-xs-12">
+                <span>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                        选择日期
+                    </button>
+                </span>
+                <span >
+                    <input type="text" autocomplete="off" id="mirror_field" value="{{today}}" readonly />
+                </span>
             </div>
-            <div class="col-md-6 col-xs-12">
-                <input type="text" id="mirror_field" value="" readonly />
+            <div class="col-md-8 col-xs-12">
+                  <ul class="nav nav-pills">
+                      <li role="presentation"><a name="dateOptions" id="6">six</a></li>
+                      <li role="presentation"><a name="dateOptions" id="5">five</a></li>
+                      <li role="presentation"><a name="dateOptions" id="4">four</a></li>
+                      <li role="presentation"><a name="dateOptions" id="3">three</a></li>
+                      <li role="presentation"><a name="dateOptions" id="2">two</a></li>
+                      <li role="presentation"><a name="dateOptions" id="1">yesterday</a></li>
+                      <li role="presentation" class="active"><a id="0" name="dateOptions">today</a></li>
+                  </ul>
             </div>
-             <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12">
                 <!-- 模态框（Modal） -->
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                    <div class="modal-dialog">
@@ -263,27 +276,9 @@
                       </div><!-- /.modal-content -->
                 </div><!-- /.modal -->
                 </div>
-             </div>
-
+            </div>
         </div>
-        <!--<div class="row">-->
-            <!--<div class="col-md-12 col-xs-12">-->
-                <!--<form action="" class="form-horizontal"  role="form">-->
-                    <!--<fieldset>-->
-                        <!--<div class="form-group">-->
-                            <!--<div class="input-group date form_date col-md-4 col-xs-8" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">-->
-                                <!--<input id="dateSel" class="form-control" type="text" value="" readonly>-->
-                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>-->
-                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>-->
-                            <!--</div>-->
-                            <!--<input type="hidden" id="dtp_input2" value="" /><br/>-->
-                        <!--</div>-->
-                    <!--</fieldset>-->
-                <!--</form>-->
-            <!--</div>-->
-        <!--</div>-->
-
-         <div class="row">
+        <div class="row">
             <div class="col-md-12 col-xs-12">
                 <table class="table table-striped">
                     <thead >
@@ -304,7 +299,7 @@
                         {% end %}
                 </table>
             </div>
-         </div>
+        </div>
 
         <br />
         <br />
@@ -320,26 +315,66 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    var myDate = new Date();
-    today=myDate.toLocaleDateString();
-    //console.info("today:",today);
+    var strToday=$('#mirror_field').val();
+    var dateToday = new Date(strToday);
+    //today=myDate.toLocaleDateString();
+    //console.info("today:",dateToday);
+
+    //初始化日期导航条
+    options=$("[name='dateOptions']");
+    var i=options.length;
+    options.each(function(){
+        i--;
+        var dd=GetSomeDate(i);
+        $(this).text(dd.getDate());
+    });
+    //获取某天的日期
+    function GetSomeDate(AddDayCount) {
+        var dd = new Date(strToday);
+        dd.setDate(dd.getDate()-AddDayCount);//获取AddDayCount天前的日期
+        //var y = dd.getFullYear();
+        //var m = dd.getMonth()+1;//获取当前月份的日期
+       // var d = dd.getDate();
+        //return y+"-"+m+"-"+d;
+        return dd;
+    }
+    //初始化日期选择器
     $('.form_date').datetimepicker({
         format: "yyyy-mm-dd",
         language:  'zh-CN',
         weekStart: 1,
-        todayBtn:  1,
+        //todayBtn:  1,
 		autoclose: 1,
 		todayHighlight: 1,
 		startView: 2,
 		minView: 2,
 		forceParse: 0,
-		endDate: today,
+		endDate: strToday,
 		pickerPosition: "bottom-left",
 		linkField: "mirror_field",
         linkFormat: "yyyy-mm-dd"
     });
-
+    //日期选择器日期change事件函数
     $('.form_date').datetimepicker().on('changeDate', function(ev){
+        getRemoteRecord();
+    });
+    //日期导航条点击事件触发函数
+    $("[name='dateOptions']").click(function(){
+        $('.nav-pills > li').removeClass('active');//取消全部active
+        $(this).parents().addClass('active');//当前点击设为active
+        var agoNum=parseInt($(this).attr("id"));
+        var dd=GetSomeDate(agoNum);//获取当前选择的日期
+        var y = dd.getFullYear();//获取年份
+        var m = dd.getMonth()+1;//获取当前的月份，0-11代表1-12所以+1
+        var d = dd.getDate();//获取几号
+        strdate=y+"-"+m+"-"+d;
+        $('#mirror_field').val(strdate);
+        $("input#dateSel").val(strdate);
+        getRemoteRecord();
+        });
+
+    //发出请求 获取json数据并显示在table
+    function getRemoteRecord(){
         $("#recordsTb tr").remove();
         user=$("a#user").text();
         //console.info("user:",user);
@@ -351,9 +386,8 @@
                 $("#recordsTb").append(newRow);
             });
         });
-    });
+    }
   });
-
 </script>
 
 <script type="text/javascript">
