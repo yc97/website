@@ -37,7 +37,7 @@ class indexHandler(BaseHandler):
             try:
                 tbody = tableRec['result']
             except KeyError:
-                tbody = (('No record. Please add ', ' ', ' ', ' ', ' '), ' ')
+                tbody = (('No record. Please add ', ' ', ' ', ' ', ' '), (' ', ' ', ' ', ' ', ' '))
             self.render('bootstrap_test.html', user=user, recSum=recSumRec['result'][0][0],
                         userSum=userSumRec['result'][0][0], newTime=newTimeRec['result'][0][0],
                         today=today,
@@ -154,9 +154,28 @@ class RecordHandler(tornado.web.RequestHandler):
             record = recordRec['result']
         except KeyError:
             record = (('No record. Please add ', ' ', ' ', ' ', ' '), (' ', ' ', ' ', ' ', ' '))
-        # for i in record['result']:
-        #     for k in i:
-        #         print k
-
         recordJson = json.dumps(record)
         self.write(recordJson)
+
+    def post(self):
+        user = self.get_argument('user')
+        time = self.get_argument('time')
+        money = self.get_argument('money')
+        money = float(money)
+        remark = self.get_argument('remark')
+        type = self.get_argument('type')
+        moneySel = self.get_argument('moneySel')
+        print user, time, money, remark, type, moneySel
+        if moneySel == 'expenses':
+            money = -(money)
+        res = Fijibook_MySQLdb().updateRecord(user, time, money, remark, type)
+        if res['code']:
+            print 'update record failed!'
+
+    def delete(self):
+        user = self.get_argument('user')
+        time = self.get_argument('time')
+        print user, time
+        res = Fijibook_MySQLdb().delRecord(user, time)
+        if res['code']:
+            self.write('delete record failed!')

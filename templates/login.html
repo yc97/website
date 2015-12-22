@@ -1,10 +1,9 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
-<script type="text/javascript">
-    function gotoregister(){
-
-    }
-</script>
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link href="../static/css/login.css" rel="stylesheet">
 <html>
 <head><title>FijiBook</title></head>
  <style type="text/css">
@@ -13,22 +12,31 @@
 		p{margin-left:5px; font-size:14px;}
  </style>
 <body>
-<div>
-    <h1> <font size=+10 color=purple><strong> FijiBook </strong></font> </h1>
-    <h2> <font size=+1 color=purple><strong> For Accounting </strong></font> </h2>
-<img src="../static/img/bill.png" alt="cc"/>
-</div>
-<h1>Please login</h1>
-<form method="post" action="/login">
-    {% raw xsrf_form_html() %}
-    <p>user<br><input type="text" name="user" value="public"></p>
-    <p>password<br><input type="password" name="passwd" value="public"></p>
-<input type="submit">
-    <p>No account?</p>
-    <a href="/register">register</a>
-    <p>{{info}}</p>
-</form>
-<!--<div>no account?</div>-->
-<!--<a href="/register">register </a>-->
+    <div class="container">
+        <form class="form-signin" method="post" action="/login">
+            {% raw xsrf_form_html() %}
+            <h1 class="form-signin-heading">FijiBook</h1>
+            <h2 class="form-signin-heading">请登录：</h2>
+            <!--<label for="inputEmail" class="sr-only">Email address</label>-->
+            <!--<input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>-->
+            <label for="inputEmail" class="sr-only">用户名</label>
+            <input type="text" id="" class="form-control" name="user" value="public" placeholder="Username" required autofocus>
+            <label for="inputPassword" class="sr-only">密码</label>
+            <input type="password" id="inputPassword" class="form-control" name="passwd" value="public" placeholder="Password" required>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="remember-me"> 记住我
+              </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+            <br />
+            <p>没有账户？</p><span><a href="/register">点击注册</a></span>
+
+            <p>{{info}}</p>
+        </form>
+    </div> <!-- /container -->
 </body>
+
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </html>

@@ -118,9 +118,16 @@ class Fijibook_MySQLdb(MySQLDatabase):
         return self.execute(cmd)
 
     def getRecord(self, user, mydate):
-        # dateAfter=mydate
-        cmd = "SELECT DATE_FORMAT(TIME,'%%T') time24,location,money,TYPE,remark FROM balance " \
+        cmd = "SELECT DATE_FORMAT(TIME,'%%T') time24,SUBSTRING_INDEX(location, ',', -1),money,TYPE,remark FROM balance " \
               "WHERE `TIME` >= '%s 00:00:00'AND `TIME` < DATE_ADD('%s',INTERVAL '1' day) AND `user` ='%s' ORDER BY TIME ASC "% (mydate, mydate, user)
+        return self.execute(cmd)
+
+    def updateRecord(self, user, time, money, remark, type):
+        cmd = "UPDATE balance SET `money`=%f,`remark`='%s',`type`='%s' WHERE `time`='%s'AND `user`='%s'"%(money, remark, type, time, user);
+        return self.execute(cmd)
+
+    def delRecord(self, user, time):
+        cmd = "DELETE FROM balance WHERE `time`='%s'AND `user`='%s';"%(time, user);
         return self.execute(cmd)
 
 if __name__ == '__main__':

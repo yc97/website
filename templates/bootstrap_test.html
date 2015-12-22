@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <head>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
     <title>FijiBook 首页</title>
 </head>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XGvfZRcqMC056a6GSpg81vIO"></script>
 
 <body>
     <nav class="navbar navbar-default navbar-static-top">
@@ -228,7 +228,6 @@
             </div>
             <div class="col-md-8 col-xs-12">
                   <ul class="nav nav-pills">
-                      <li role="presentation"><a name="dateOptions" id="6">six</a></li>
                       <li role="presentation"><a name="dateOptions" id="5">five</a></li>
                       <li role="presentation"><a name="dateOptions" id="4">four</a></li>
                       <li role="presentation"><a name="dateOptions" id="3">three</a></li>
@@ -294,13 +293,108 @@
                                     {% for j1 in j %}
                                         <td>{{j1}}</td>
                                     {% end %}
+                                    <td><a class='glyphicon glyphicon-pencil' aria-hidden='true' data-toggle='modal' data-target='#recordEdit' role='button'></a></td>
+                                    <td><a class='glyphicon glyphicon-trash' aria-hidden='true' role='button'></a></td>
                                 </tr>
                             </tbody>
                         {% end %}
                 </table>
             </div>
         </div>
-
+        <!--模态框 编辑记录-->
+        <div class="modal fade" id="recordEdit" tabindex="-1" role="dialog" aria-labelledby="recordEditLabel" aria-hidden="true">
+                   <div class="modal-dialog">
+                      <div class="modal-content">
+                         <div class="modal-header">
+                            <button type="button" class="close"
+                               data-dismiss="modal" aria-hidden="true">
+                                  &times;
+                            </button>
+                            <h4 class="modal-title" id="recordEditLabel">
+                               编辑记录
+                            </h4>
+                         </div>
+                         <div class="modal-body">
+                             <div class="row">
+                                 <div class="col-md-4 col-xs-12">
+                                    <input type="text" autocomplete="off" id="recordDate" value="{{today}}" readonly />
+                                 </div>
+                                 <div class="col-md-4 col-xs-12">
+                                    <input type="text" autocomplete="off" id="myLocation" value="myLocation" readonly />
+                                 </div>
+                                  <div class="col-md-4 col-xs-12">
+                                    <input type="text" autocomplete="off" id="inOrOut" value="inOrOut" readonly />
+                                 </div>
+                                 <br /><br />
+                                 <form name="newInfo" method="post" action="#" onSubmit="return validate_editForm(this)">
+                                     {% raw xsrf_form_html() %}
+                                     <div class="col-md-12 col-xs-12">
+                                         <div class="form-group">
+                                             <div class="input-group">
+                                                 <span class="input-group-addon">金额:</span>
+                                                 <input class="form-control" type="number" step="0.01" id="newMoney" name="newMoney" required="required" aria-describedby="sizing-addon1">
+                                             </div>
+                                         </div>
+                                         <input id="moneySel" type="hidden" name="moneySel" value="expenses"/>
+                                     </div>
+                                     <div id="expenseDw" class="col-md-3 col-xs-12">
+                                        <div  class="btn-group">
+                                          <button name="newExpenseType" type="button" class="btn btn-default">
+                                              types
+                                          </button>
+                                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                          </button>
+                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                              {% for k in expensebody %}
+                                                {% for k1 in k %}
+                                                <li><a href="#">{{k1}}</a></li>
+                                                {% end %}
+                                              {% end %}
+                                          </ul>
+                                        </div>
+                                     </div>
+                                     <div id="incomeDw" class="col-md-3 col-xs-12 hidden">
+                                        <div class="btn-group">
+                                          <button name="newIncomeType" type="button" class="btn btn-default">
+                                              types
+                                          </button>
+                                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                          </button>
+                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                              {% for k in incomebody %}
+                                                {% for k1 in k %}
+                                                <li><a href="#">{{k1}}</a></li>
+                                                {% end %}
+                                              {% end %}
+                                          </ul>
+                                        </div>
+                                     </div>
+                                     <div class="col-md-9 col-xs-12">
+                                         <div class="form-group">
+                                             <div class="input-group">
+                                                 <span class="input-group-addon">备注:</span>
+                                                 <input class="form-control" type="text"  id="newRemark" name="newRemark"  placeholder="Details！" aria-describedby="sizing-addon1">
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </form>
+                             </div>
+                         </div>
+                         <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                取消
+                            </button>
+                            <button id="saveEdit" type="button" class="btn btn-primary" data-dismiss="modal">
+                               保存
+                            </button>
+                         </div>
+                      </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+        </div>
         <br />
         <br />
         <br />
@@ -315,6 +409,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    var user=$("a#user").text();
     var strToday=$('#mirror_field').val();
     var dateToday = new Date(strToday);
     //today=myDate.toLocaleDateString();
@@ -328,6 +423,7 @@
         var dd=GetSomeDate(i);
         $(this).text(dd.getDate());
     });
+
     //获取某天的日期
     function GetSomeDate(AddDayCount) {
         var dd = new Date(strToday);
@@ -338,6 +434,7 @@
         //return y+"-"+m+"-"+d;
         return dd;
     }
+
     //初始化日期选择器
     $('.form_date').datetimepicker({
         format: "yyyy-mm-dd",
@@ -354,14 +451,17 @@
 		linkField: "mirror_field",
         linkFormat: "yyyy-mm-dd"
     });
+
     //日期选择器日期change事件函数
     $('.form_date').datetimepicker().on('changeDate', function(ev){
+        $('.nav-pills > li').removeClass('active');//取消全部active
         getRemoteRecord();
     });
+
     //日期导航条点击事件触发函数
     $("[name='dateOptions']").click(function(){
         $('.nav-pills > li').removeClass('active');//取消全部active
-        $(this).parents().addClass('active');//当前点击设为active
+        $(this).parent().addClass('active');//当前点击设为active
         var agoNum=parseInt($(this).attr("id"));
         var dd=GetSomeDate(agoNum);//获取当前选择的日期
         var y = dd.getFullYear();//获取年份
@@ -373,20 +473,107 @@
         getRemoteRecord();
         });
 
+    //编辑记录模态框事件
+   $(function () { $('#recordEdit').on('show.bs.modal', function (event) {
+      var target=event.relatedTarget;
+      var tdSel=$(target).parent();
+      var trSel=$(tdSel).parent();
+      var allTd=$(trSel).children();
+      var timeSel=allTd['0'].innerHTML;
+      var myLocation=allTd['1'].innerHTML;
+      var money=allTd['2'].innerHTML;
+      var type=allTd['3'].innerHTML;
+      var detail=allTd['4'].innerHTML;
+      //console.info(allTd['0'].innerHTML);
+      //console.info(trSel.text());
+      var tmp = $('#mirror_field').val();
+      tmp += (" "+timeSel);
+      $('#recordDate').val(tmp);
+      $('#myLocation').val(myLocation);
+      if(parseFloat(money)<0)
+        {
+            $('#inOrOut').val('支出');
+            $('#expenseDw').removeClass();
+            $('#expenseDw').addClass("col-md-3 col-xs-12");
+            $('#incomeDw').removeClass();
+            $('#incomeDw').addClass("col-md-3 col-xs-12 hidden");
+            $('[name=newExpenseType]').text(type);
+            money=-money;
+        }
+      else
+        {
+            $('#inOrOut').val('收入');
+            $('#expenseDw').removeClass();
+            $('#expenseDw').addClass("col-md-3 col-xs-12 hidden");
+            $('#incomeDw').removeClass();
+            $('#incomeDw').addClass("col-md-3 col-xs-12");
+            $('[name=newIncomeType]').text(type);
+        }
+      $('#newMoney').val(money);
+      $('#newRemark').val(detail);
+      })
+   });
+
+    //保存修改按钮点击
+   $('#saveEdit').click(function(){
+        updateRemoteRecord();
+   });
+
+   //$('.glyphicon-trash').click(function(){alert('hello')});
+
     //发出请求 获取json数据并显示在table
     function getRemoteRecord(){
         $("#recordsTb tr").remove();
-        user=$("a#user").text();
         //console.info("user:",user);
-        strdate = $("input#dateSel").val();
+        strdate = $("#mirror_field").val();
         //console.info("strdate:",strdate);
         $.getJSON("/record",{user:user,myDate:strdate},function(records){
             $.each(records,function(i,record){
-                var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4']+"</td></tr>";
+                //poiTmp=record['1'].split(',');
+                //poi=poiTmp[poiTmp.length-1];
+                var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4'];
+                newRow+="</td><td><a class='glyphicon glyphicon-pencil' aria-hidden='true' data-toggle='modal' data-target='#recordEdit' role='button'></a></td>";
+                newRow+="<td><a class='glyphicon glyphicon-trash' aria-hidden='true' role='button' onClick='javascript:delRecord(this)'></a></td></tr>";
+                //newRow+="<td><a class='glyphicon glyphicon-trash' aria-hidden='true' role='button'></a></td></tr>";
                 $("#recordsTb").append(newRow);
             });
         });
     }
+
+    //发出post请求，更新记录
+    function updateRemoteRecord(){
+        var time= $('#recordDate').val();
+        var money=$('#newMoney').val();
+        var remark=$('#newRemark').val();
+        if($('#inOrOut').val()=='支出')
+        {
+            $('#moneySel').val('expenses');
+            var type=$('[name=newExpenseType]').text();
+        }
+        else if ($('#inOrOut').val()=='收入')
+        {
+            $('#moneySel').val('income');
+            var type=$('[name=newIncomeType]').text();
+        }
+        var moneySel=$('#moneySel').val();
+        data={
+            user:user,
+            time:time,
+            money:money,
+            remark:remark,
+            type:type,
+            moneySel:moneySel
+            }
+        data._xsrf = getCookie("_xsrf");
+        $.post('/record',data,function(){getRemoteRecord();});
+    }
+
+    //通过名字获取cookie
+    function getCookie(name) {
+        var c = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return c ? c[1] : undefined;
+    }
+
   });
 </script>
 
@@ -504,6 +691,16 @@
       }
     }
 
+    function validate_editForm(thisform)
+    {
+    with (thisform)
+      {
+      if (validate_required(newMoney,"请输入金额!")==false)
+        {newMoney.focus();return false}
+      }
+    }
+
+
    $(function(){
       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
           // 获取已激活的标签页的名称
@@ -528,5 +725,60 @@
          document.getElementById("moreTypeBtn").innerHTML = "更多分类";})
    });
 
+   $('#collapseOne').on('show.bs.collapse', function () {
+        map.centerAndZoom(point,16);//map重定向到中心点
+        console.info('hello');
+    })
+
+   //删除按钮点击
+    function delRecord(object)
+    {
+        var choice=confirm("您确认要删除该记录吗？");
+        if(choice){
+        var user=$("a#user").text();
+        var tdSel=$(object).parent();
+        var trSel=$(tdSel).parent();
+        var allTd=$(trSel).children();
+        var time=allTd['0'].innerHTML;
+        var date=$('#mirror_field').val();
+        var dateTime=date+' '+time;
+        data={user:user,time:dateTime};
+        //data._method = "delete";
+        data._xsrf = getCookie("_xsrf");
+       // console.info(data);
+        //$.post('/record',data,function(){getRemoteRecord();});
+        $.ajax({
+          type: 'DELETE',
+          url: '/record',
+          data: data,
+          success: function(){getRemoteRecord();},
+          //dataType: dataType
+        });
+        }
+    }
+        //通过名字获取cookie
+    function getCookie(name) {
+        var c = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+        return c ? c[1] : undefined;
+    }
+
+    function getRemoteRecord(){
+        $("#recordsTb tr").remove();
+        var user=$("a#user").text();
+        //console.info("user:",user);
+        strdate = $("#mirror_field").val();
+        //console.info("strdate:",strdate);
+        $.getJSON("/record",{user:user,myDate:strdate},function(records){
+            $.each(records,function(i,record){
+                //poiTmp=record['1'].split(',');
+                //poi=poiTmp[poiTmp.length-1];
+                var newRow = "<tr><td>"+record['0']+"</td><td>"+record['1']+"</td><td>"+record['2']+"</td><td>"+record['3']+"</td><td>"+record['4'];
+                newRow+="</td><td><a class='glyphicon glyphicon-pencil' aria-hidden='true' data-toggle='modal' data-target='#recordEdit' role='button'></a></td>";
+                newRow+="<td><a class='glyphicon glyphicon-trash' aria-hidden='true' role='button' onClick='javascript:delRecord(this)'></a></td></tr>";
+                //newRow+="<td><a class='glyphicon glyphicon-trash' aria-hidden='true' role='button'></a></td></tr>";
+                $("#recordsTb").append(newRow);
+            });
+        });
+    }
 
 </script>
