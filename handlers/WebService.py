@@ -144,11 +144,11 @@ class POIHandler(BaseHandler):
     def get(self):
         self.render('POI.html')
 
-class RecordHandler(tornado.web.RequestHandler):
+class RecordHandler(BaseHandler):
     def get(self):
         mydate = self.get_argument('myDate')
-        user = self.get_argument('user')
-        # print mydate, user
+        user = self.get_current_user()
+        #print mydate, user
         recordRec = Fijibook_MySQLdb().getRecord(user, mydate)
         try:
             record = recordRec['result']
@@ -158,24 +158,24 @@ class RecordHandler(tornado.web.RequestHandler):
         self.write(recordJson)
 
     def post(self):
-        user = self.get_argument('user')
+        user = self.get_current_user()
         time = self.get_argument('time')
         money = self.get_argument('money')
         money = float(money)
         remark = self.get_argument('remark')
         type = self.get_argument('type')
         moneySel = self.get_argument('moneySel')
-        print user, time, money, remark, type, moneySel
+        #print user, time, money, remark, type, moneySel
         if moneySel == 'expenses':
             money = -(money)
         res = Fijibook_MySQLdb().updateRecord(user, time, money, remark, type)
-        if res['code']:
-            print 'update record failed!'
+        #if res['code']:
+            #print 'update record failed!'
 
     def delete(self):
-        user = self.get_argument('user')
+        user = self.get_current_user()
         time = self.get_argument('time')
-        print user, time
+        #print user, time
         res = Fijibook_MySQLdb().delRecord(user, time)
         if res['code']:
             self.write('delete record failed!')
