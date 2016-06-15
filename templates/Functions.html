@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../static/css/jquery.tagsinput.css" />
+
+<html>
+<head><title>Online System</title></head>
+<body>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
+                <a class="navbar-brand" href="#">System</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/index">Home</a></li>
+                    <!--<li><a href="#about">About</a></li>-->
+                    <!--<li><a href="#contact">Contact</a></li>-->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <!--<li><a href="#">配置</a></li>-->
+                            <!--<li><a href="#">系统设置</a></li>-->
+                            <!--<li role="separator" class="divider"></li>-->
+                            <!--<li class="dropdown-header">Nav header</li>-->
+                            <!--<li><a href="#">Separated link</a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="user" href="#user">{{user}}</a></li>
+                    <li class="active"><a href="/logout">注销</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron" id="content" tabindex="-1">
+        <div class="container">
+            <!--<div class="container theme-showcase" role="main">-->
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <!--<div class="jumbotron">-->
+                    <h1> 可靠性、维修性设计分析 </h1>
+                    <p> 将健康管理进行到底~</p>
+                    <!--</div>-->
+                </div>
+            </div>
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-xs-12">
+                <h2>系统管理</h2>
+                <img src="../static/img/settings.png" />
+                 <p><a class="btn btn-default" href="/system" role="button">点击进入 »</a></p>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <h2>历史数据</h2>
+                <img src="../static/img/calendar.png" />
+                <p><a class="btn btn-default" href="/history" role="button">点击进入 »</a></p>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <h2>健康管理</h2>
+                <img src="../static/img/health.png" />
+                <p><a class="btn btn-default" href="/health" role="button">点击进入 »</a></p>
+            </div>
+        </div>
+        <hr />
+        <footer>
+            <p>Online System 2016</p>
+        </footer>
+    </div>
+</body>
+
+
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</html>
+
+
+
+
+
+

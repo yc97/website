@@ -14,23 +14,21 @@
 ##   2. ...
 
 
-from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, \
-    JSMapHandler, registerHandler, POIHandler, VerificationImgHandler, RecordHandler
-#
-# from handlers.WebService import indexHandler, loginHandler, LogoutHandler, MapHandler, JSMapHandler, registerHandler,
-
-
+from handlers.WebService import indexHandler, loginHandler, LogoutHandler, \
+     registerHandler, VerificationImgHandler, RecordHandler, FilesHandler, SetupHandler, FunctionsHandler, systemHandler, healthHandler, historyHandler
 urls = [
-    ('/', indexHandler),
+    ('/', FunctionsHandler),
     ('/login', loginHandler),
     ('/logout', LogoutHandler),
     ('/index', indexHandler),
     ('/register', registerHandler),
-    ('/map', MapHandler),
-    ('/jsmap', JSMapHandler),
-    ('/poi', POIHandler),
-    ('/register', registerHandler),
     ('/verificationimg', VerificationImgHandler),
     ('/record', RecordHandler),
+    ('/files', FilesHandler),
+    ('/setup', SetupHandler),
+    ('/Functions', FunctionsHandler),
+    ('/system', systemHandler),
+    ('/health', healthHandler),
+    ('/history', historyHandler),
     ]
 

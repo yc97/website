@@ -22,7 +22,7 @@ import setting
 import os.path
 
 from tornado.options import define, options
-define("port", default=8080, help="run on the given port", type=int)
+define("port", default=1000, help="run on the given port", type=int)
 
 def main():
     tornado.options.parse_command_line()

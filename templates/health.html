@@ -7,7 +7,7 @@
 <link href="//cdn.bootcss.com/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet">
 <link href="../static/css/steps.css" rel="stylesheet">
 <head>
-    <title>Online System</title>
+    <title>Online System - 健康管理</title>
 </head>
 
 <body>
@@ -16,11 +16,11 @@
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
-                <a class="navbar-brand" href="#">System</a>
+                <a class="navbar-brand" href="/Functions">System</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/index">Home</a></li>
+                    <li class="active"><a href="/Functions">Home</a></li>
                     <!--<li><a href="#about">About</a></li>-->
                     <!--<li><a href="#contact">Contact</a></li>-->
                     <li class="dropdown">
@@ -53,118 +53,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 col-xs-3">
-                <ul class="nav nav-tabs ">
-                    <li id="currentSysNav" class="active" role="presentation">
-                        <a href="#currentSys" data-toggle="tab" name="maintenance"><p>当前系统</p></a>
-                    </li>
-                    <li id="newSystemNav" role="presentation">
-                        <a href="#newSystem" data-toggle="tab" name="reliability"><p>新建系统</p></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="currentSys" class="tab-pane in active">
-                        <br />
-                        <div class="col-md-12">
-                            <div class="panel-group"  role="tablist" aria-multiselectable="true" id="sysList">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div id="newSystem" class="tab-pane">
-                        <br />
-                        <div class="col-md-12">
-                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingOne">
-                                        <h4 class="panel-title">
-                                            <a role="button" data-toggle="modal" data-target="#cfgModal">
-                                                配置向导
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#fileImport" aria-expanded="false" aria-controls="collapseTwo">
-                                                导入配置文件
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="fileImport" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                        <div class="panel-body">
-                                            <input id="cfgFile" name="file" type="file" class="hidden" autocomplete="off">
-                                            <span id="cfgFileName">'cfg'only</span>
-                                            <button class="btn btn-default" onclick="$('input[id=cfgFile]').click();"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>选择文件</button>
-                                            <button class="btn btn-default" id="cfgImport"><span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>导入</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingThree">
-                                        <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#fileExport" aria-expanded="false" aria-controls="collapseThree">
-                                                导出配置文件
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="fileExport" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                        <div class="panel-body">
-                                            cfg文件已生成  <a id="cfgDownload" href="">点击下载</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 配置向导模态框（Modal） -->
-                            <div class="modal fade" id="cfgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="cfgModalLabel">
-                                            配置向导
-                                            </h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="cfgForm" action='' method="post">
-                                                <div>
-                                                    <h3>系统信息</h3>
-                                                    <section>
-                                                        <label for="sysName">系统名称 *</label>
-                                                        <input id="sysName" name="sysName" type="text" class="required">
-                                                        <!--<label for="levelNum">最大级别数 *</label>-->
-                                                        <!--<input id="levelNum" name="levelNum" type="number" class="required"  min="1" max="5" step="1" value="2">-->
-                                                        <p>(*) Mandatory</p>
-                                                    </section>
-                                                    <h3>系统树</h3>
-                                                    <section>
-                                                        <label>请创建系统树</label>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <button type="button" class="btn btn-success btn-sm" onclick="tree_create();"><i class="glyphicon glyphicon-asterisk"></i> 新建节点</button>
-                                                                <button type="button" class="btn btn-warning btn-sm" onclick="tree_rename();"><i class="glyphicon glyphicon-pencil"></i> 重命名</button>
-                                                                <button type="button" class="btn btn-danger btn-sm" onclick="tree_delete();"><i class="glyphicon glyphicon-remove"></i> 删除</button>
-                                                            </div>
-                                                        </div>
-                                                        <div id="editTree"></div>
-                                                    </section>
-                                                    <h3>系统预览</h3>
-                                                    <section>
-                                                        <div id="previewTree"></div>
-                                                    </section>
-                                                </div>
-                                            </form>
-                                        </div>
-                                  </div><!-- /.modal-content -->
-                            </div><!-- /.modal -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!--切换 维修/可靠-->
-            <div class="col-md-9 col-xs-9">
+            <div class="col-md-12 col-xs-12">
                     <ul class="nav nav-tabs ">
                         <li id="navExpense" class="active" role="presentation">
                             <a href="#maintenance" data-toggle="tab" name="maintenance"><p>维修性设计分析</p></a>
@@ -455,18 +345,7 @@
                 </div>
             </div>
         </div>
-        <!--文件上传-->
-        <div class="row">
-            <div class="col-md-12 col-xs-12">
-                <h3>上传文件</h3>
-                <input id="file" name="file" type="file" class="hidden" autocomplete="off">
-                <!--<input type="hidden" id="fileCp" />-->
-                <span id="fileName">'csv' only</span>
-                <button class="btn btn-default" onclick="$('input[id=file]').click();"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>选择文件</button>
-                <button class="btn btn-default" id="submitFile"><span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>上传</button>
-                <div id="chart" style="width: 600px;height:400px;"></div>
-            </div>
-        </div>
+
         <br />
         <hr />
         <footer><p>Online System</p></footer>
@@ -481,7 +360,7 @@
 <script src="//cdn.bootcss.com/jquery-steps/1.1.0/jquery.steps.min.js"></script>
 <script src="//cdn.bootcss.com/jquery-validate/1.13.1/jquery.validate.min.js"></script>
 <script src="../static/js/ajax-setup.js"></script>
-<script src="../static/js/charts.js"></script>
+
 
 </body>
 </html>
@@ -702,312 +581,3 @@
     }
 </script>
 
-<script type="text/javascript">
-$('#cfgFile').on('change', function(){
-    //console.info(this);
-    if(this.value.indexOf('cfg')<0){
-        clearInputFile(this);
-        alert('请选择cfg文件');
-    }
-    else{
-        $('#cfgFileName').html(this.value);
-    }
-});
-
-$('#cfgImport').click(function(){
-    if(!window.FormData) {　
-        alert('your brower is too old');
-        return false;
-    }
-    else{
-        var files = $('#cfgFile').prop('files');//获取到文件列表
-        if(files.length == 0){
-            alert('请选择文件');
-            return;
-        }
-        else{
-            var fd = new FormData();
-            fd.append("isUpdate", 0);                        // 可以增加表单数据
-            fd.append("source", "file");                        // 可以增加表单数据
-            fd.append("file", files[0]);                           // 文件对象
-            $.ajax({
-                url:"/setup",
-                type:"POST",
-                data:fd,
-                processData: false,
-                contentType: false,
-                dataType:'json',
-                success:function(res){alert(res['state']);location.reload(true);}
-            });
-        }
-    }
-});
-</script>
-
-<script type="text/javascript">
-$('#file').on('change', function(){
-    //console.info(this);
-    if(this.value.indexOf('csv')<0){
-        clearInputFile(this);
-        alert('请选择csv文件');
-    }
-    else{
-        $('#fileName').html(this.value);
-    }
-});
-
-$('#submitFile').click(function(){
-    if(!window.FormData) {　
-        alert('your brower is too old');
-        return false;
-    }
-    else{
-        var files = $('#file').prop('files');//获取到文件列表
-        if(files.length == 0){
-            alert('请选择文件');
-            return;
-        }
-        else{
-            var fd = new FormData();
-            fd.append("author", "lyc");                        // 可以增加表单数据
-            fd.append("file", files[0]);                           // 文件对象
-            $.ajax({
-                url:"/files",
-                type:"POST",
-                data:fd,
-                processData: false,
-                contentType: false,
-                dataType:'json',
-                success:function(res){alert(res['status']);getFileData();}
-            });
-        }
-    }
-});
-function getFileData(){
-    myLineChart.showLoading();
-    $.getJSON("/files",{filename:'myfile.csv'},function(fileData){
-        RefreshCharts(fileData);
-    });
-}
-function clearInputFile(f){
-    if(f.value){
-        try{
-            f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
-        }catch(err){
-        }
-        if(f.value){ //for IE5 ~ IE10
-            var form = document.createElement('form'), ref = f.nextSibling;
-            form.appendChild(f);
-            form.reset();
-            ref.parentNode.insertBefore(f,ref);
-        }
-    }
-}
-</script>
-
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myLineChart = echarts.init(document.getElementById('chart'));
-    ChartInit();
-    function RefreshCharts(fileData){
-        XData=new Array();
-        seriesData=new Array();
-        $.each(fileData,function(i,item){
-            XData.push(item['time']);
-            seriesData.push(item['value']);
-        });
-        lineOption.xAxis[0]['data']=XData;
-        lineOption.series[0]['data']=seriesData;
-        myLineChart.hideLoading();
-        myLineChart.setOption(lineOption);
-    }
-</script>
-<script type="text/javascript">
-    // 基于准备好的dom，初始化tree实例
-    treeOption={
-        "core" : {
-            "animation" : 0,
-            "check_callback" : true,
-            "themes" : { "stripes" : true },
-            "data" : [
-               { "id" : "ajson1", "parent" : "#", "text" : "系统" , "icon" : "glyphicon glyphicon-home"},
-            ],
-        },
-        "plugins" : [
-            "contextmenu", "dnd", "search",
-            "state", "types", "wholerow"
-        ]
-    };
-
-    function tree_create() {
-        var ref = $('#editTree').jstree(true),
-            sel = ref.get_selected();
-        if(!sel.length) { return false; }
-        sel = sel[0];
-        sel = ref.create_node(sel, {"type":"file","icon" : "glyphicon glyphicon-screenshot"});
-        if(sel) {
-            ref.edit(sel);
-        }
-    };
-
-    function tree_rename() {
-        var ref = $('#editTree').jstree(true),
-            sel = ref.get_selected();
-        if(!sel.length) { return false; }
-        sel = sel[0];
-        ref.edit(sel);
-    };
-
-    function tree_delete() {
-        var ref = $('#editTree').jstree(true),
-            sel = ref.get_selected();
-        if(!sel.length) { return false; }
-        ref.delete_node(sel);
-    };
-
-    $(document).ready(function(){
-        //$('#editTree').jstree();
-        $('#previewTree').jstree();
-        getSystems();
-    });
-</script>
-<script type="text/javascript">
-    var form = $("#cfgForm");
-    form.validate({
-        errorPlacement: function errorPlacement(error, element) { element.before(error); },
-        rules: {
-            confirm: {
-                equalTo: "#password"
-            }
-        }
-    });
-    form.children("div").steps({
-        headerTag: "h3",
-        bodyTag: "section",
-        transitionEffect: "slideLeft",
-        onStepChanging: function (event, currentIndex, newIndex)
-        {
-            if(currentIndex == 0 && newIndex == 1){
-                setEditTree();
-            }
-            if(currentIndex == 1 && newIndex == 2){
-                setPreviewTree();
-            }
-            form.validate().settings.ignore = ":disabled,:hidden";
-            return form.valid();
-        },
-        onFinishing: function (event, currentIndex)
-        {
-            form.validate().settings.ignore = ":disabled";
-            optionStr=JSON.stringify(treeOption.core.data);
-            $('#treeOption').val(optionStr);
-            return form.valid();
-        },
-        onFinished: function (event, currentIndex)
-        {
-            optionStr=JSON.stringify(treeOption.core.data);
-            $.post('/setup',{'treeOption': optionStr, 'source': 'json', 'isUpdate': 0},function(rec){alert(rec['state']);location.reload(true);});
-        }
-    });
-
-    function setEditTree(){
-        var sysName = $("#sysName").val();
-        //var levelNum = $("#levelNum").val();
-        treeOption.core.data = { "id" : "root", "parent" : "#", "text" : sysName , "icon" : "glyphicon glyphicon-home",};
-        //treeOption.types["#"]["max_depth"] = levelNum;
-        $('#editTree').jstree(treeOption);
-
-        ref = $('#editTree').jstree(true);
-        ref.rename_node('root',sysName);
-    }
-
-    function setPreviewTree(){
-        ref = $('#editTree').jstree();
-        treeOption.core.data = [];
-        for (node in ref._model.data){
-            if (node != '#'){
-                sel = ref._model.data[node];
-                data = {"id" : sel.id, "parent" : sel.parent, "text" : sel.text , "icon" : sel.icon,};
-                treeOption.core.data.push(data);
-            }
-        }
-        $('#previewTree').jstree().destroy();
-        $('#previewTree').jstree(treeOption);
-    }
-</script>
-
-<script type="text/javascript">
-    $('#fileExport').on('show.bs.collapse', function () {
-        optionStr=JSON.stringify(treeOption.core.data);
-        //console.info(JSON.stringify(treeOption))
-        downloadFile('sys_cfg.cfg',optionStr);
-    })
-    function downloadFile(fileName, content){
-        //console.info('down')
-        var aLink = $('#cfgDownload');
-        var blob = new Blob([content]);
-        aLink.attr('download',fileName);
-        aLink.attr('href',URL.createObjectURL(blob));
-    }
-</script>
-<script type="text/javascript">
-    function getSystems(){
-        $.getJSON("/setup",function(systems){
-            var sysName;
-            var sysOptions;
-            var optionsJson;
-            if (systems['status']=='0'){
-                //alert(systems['result']);
-                $('#sysList').append("暂无系统，请新建！");
-                return;
-            }
-            else if (systems['status']=='1'){
-                $.each(systems['result'],function(i,system){
-                    sysName = system[0];
-                    treeId = sysName + "Tree";
-                    panelId = sysName + "Panel";
-                    sysOptions = system[1];
-                    optionsJson = eval('(' + sysOptions + ')');
-                    var newSys = "<div class='panel panel-default'>" +
-                                        "<div class='panel-heading' role='tab'>" +
-                                            "<h4 class='panel-title'>" +
-                                                "<a class='collapsed' role='button' data-toggle='collapse' data-parent='#sysList' href='#" + panelId + "' aria-expanded='false' aria-controls='collapseTwo'>" +
-                                                    sysName +
-                                                "</a>" +
-                                            "</h4>" +
-                                        "</div>" +
-                                        "<div id=" + panelId + " class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingTwo'>" +
-                                            "<div class='panel-body'>" +
-                                                "<div id=" + treeId + "></div>" +
-                                            "</div>" +
-                                        "</div>" +
-                                    "</div>"
-                    $('#sysList').append(newSys);
-                    treeOption.core.data = optionsJson;
-                    //$('#'+treeId).jstree(treeOption);
-                    $('#'+treeId).on('changed.jstree', function (e, data) {
-                        treeSel(e,data);
-                    }).jstree(treeOption);
-                });
-            }
-        });
-    }
-</script>
-<script>
-    function  treeSel(e, data) {
-        var i, j, r = [];
-        console.info(data)
-        for(i = 0, j = data.selected.length; i < j; i++) {
-          r.push(data.instance.get_node(data.selected[i]).text);
-        }
-        //console.info('Selected: ' + r.join(', '));
-        nodeSel = data.instance.get_node(data.selected[0]);
-        //console.info(data.instance.is_leaf(nodeSel))
-        //console.info(data.instance._model.data.root.text);
-        sysName = data.instance._model.data.root.text
-        if(data.instance.is_leaf(nodeSel)){
-            $("#prName").val(nodeSel.text);
-        }
-
-    }
-</script>

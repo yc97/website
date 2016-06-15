@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=1" />
+
+<html lang="zh-CN">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link href="//cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.3.8/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/jstree/3.2.1/themes/default/style.min.css" rel="stylesheet">
+<link href="../static/css/steps.css" rel="stylesheet">
+<head>
+    <title>Online System - 历史数据</title>
+</head>
+
+<body>
+    <!--导航窗格-->
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"></button>
+                <a class="navbar-brand" href="#">System</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/index">Home</a></li>
+                    <!--<li><a href="#about">About</a></li>-->
+                    <!--<li><a href="#contact">Contact</a></li>-->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">配置</a></li>
+                            <li><a href="#">系统设置</a></li>
+                            <!--<li role="separator" class="divider"></li>-->
+                            <!--<li class="dropdown-header">Nav header</li>-->
+                            <!--<li><a href="#">Separated link</a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a id="user" href="#user">{{user}}</a></li>
+                    <li class="active"><a href="/logout">注销</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--网页容器-->
+    <div class="container">
+        <!--巨幕-->
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="jumbotron">
+                    <h1> 可靠性、维修性设计分析 </h1>
+                    <p> 将健康管理进行到底~</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+        <!--文件上传-->
+        <div class="row">
+            <div class="col-md-3 col-xs-12">
+                <ul class="nav nav-tabs ">
+                    <li id="currentSysNav" class="active" role="presentation">
+                        <a href="#currentSys" data-toggle="tab" name="maintenance"><p>当前系统</p></a>
+                    </li>
+                    <!--<li id="newSystemNav" role="presentation">-->
+                        <!--<a href="#newSystem" data-toggle="tab" name="reliability"><p>新建系统</p></a>-->
+                    <!--</li>-->
+                </ul>
+                <div class="tab-content">
+                    <div id="currentSys" class="tab-pane in active">
+                        <br />
+                        <div class="col-md-12">
+                            <div class="panel-group"  role="tablist" aria-multiselectable="true" id="sysList">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-xs-12">
+                 <div class="row">
+                    <div class="col-md-4 col-xs-12">
+                        <span>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                选择日期
+                            </button>
+                        </span>
+                        <span >
+                            <input type="text" autocomplete="off" id="mirror_field" value="{{today}}" readonly />
+                        </span>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                          <ul class="nav nav-pills">
+                              <li role="presentation"><a name="dateOptions" id="5">five</a></li>
+                              <li role="presentation"><a name="dateOptions" id="4">four</a></li>
+                              <li role="presentation"><a name="dateOptions" id="3">three</a></li>
+                              <li role="presentation"><a name="dateOptions" id="2">two</a></li>
+                              <li role="presentation"><a name="dateOptions" id="1">yesterday</a></li>
+                              <li role="presentation" class="active"><a id="0" name="dateOptions">today</a></li>
+                          </ul>
+                    </div>
+                    <div class="col-md-12 col-xs-12">
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                           <div class="modal-dialog">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <button type="button" class="close"
+                                       data-dismiss="modal" aria-hidden="true">
+                                          &times;
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                       选择日期
+                                    </h4>
+                                 </div>
+                                 <div class="modal-body">
+                                    <form action="" class="form-horizontal"  role="form">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div id= "form_date" class="input-group date form_date col-md-8 col-xs-12" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                                <input id="dateSel" class="form-control" type="text" value="" readonly>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                            </div>
+                                            <input type="hidden" id="dtp_input2" value="" /><br/>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                                 </div>
+                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-default"
+                                       data-dismiss="modal">关闭
+                                    </button>
+                                    <!--<button type="button" class="btn btn-primary">-->
+                                       <!--提交更改-->
+                                    <!--</button>-->
+                                 </div>
+                              </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                        </div>
+                    </div>
+                </div>
+                <div id="chart" style="width: 600px;height:400px;"></div>
+                <h3>上传文件</h3>
+                <input id="file" name="file" type="file" class="hidden" autocomplete="off">
+                <!--<input type="hidden" id="fileCp" />-->
+                <span id="fileName">'csv' only</span>
+                <button class="btn btn-default" onclick="$('input[id=file]').click();"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>选择文件</button>
+                <button class="btn btn-default" id="submitFile"><span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>上传</button>
+
+            </div>
+        </div>
+        <br />
+        <hr />
+        <footer><p>Online System</p></footer>
+</div>
+
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="//cdn.bootcss.com/echarts/3.0.0/echarts.min.js"></script>
+<script src="//cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.3.8/js/bootstrap-datetimepicker.min.js"></script>
+<script src="//cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.3.8/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="//cdn.bootcss.com/jstree/3.2.1/jstree.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-validate/1.13.1/jquery.validate.min.js"></script>
+<script src="../static/js/ajax-setup.js"></script>
+<script src="../static/js/charts.js"></script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var user=$("a#user").text();
+    var strToday=$('#mirror_field').val();
+    var dateToday = new Date(strToday);
+    //today=myDate.toLocaleDateString();
+    //console.info("today:",dateToday);
+
+    //初始化日期导航条
+    options=$("[name='dateOptions']");
+    var i=options.length;
+    options.each(function(){
+        i--;
+        var dd=GetSomeDate(i);
+        $(this).text(dd.getDate());
+    });
+
+    //获取某天的日期
+    function GetSomeDate(AddDayCount) {
+        var dd = new Date(strToday);
+        dd.setDate(dd.getDate()-AddDayCount);//获取AddDayCount天前的日期
+        //var y = dd.getFullYear();
+        //var m = dd.getMonth()+1;//获取当前月份的日期
+       // var d = dd.getDate();
+        //return y+"-"+m+"-"+d;
+        return dd;
+    }
+
+    //初始化日期选择器
+    $('#form_date').datetimepicker({
+        format: "yyyy-mm-dd hh:mm:ss",
+        language:  'zh-CN',
+        weekStart: 1,
+        //todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		//minView: 1,
+		forceParse: 0,
+		endDate: strToday,
+		pickerPosition: "bottom-left",
+		linkField: "mirror_field",
+        linkFormat: "yyyy-mm-dd hh:mm:ss"
+    });
+
+    //日期选择器日期change事件函数
+    $('#form_date').datetimepicker().on('changeDate', function(ev){
+        $('.nav-pills > li').removeClass('active');//取消全部active
+        getRemoteRecord();
+    });
+
+    //日期导航条点击事件触发函数
+    $("[name='dateOptions']").click(function(){
+        $('.nav-pills > li').removeClass('active');//取消全部active
+        $(this).parent().addClass('active');//当前点击设为active
+        var agoNum=parseInt($(this).attr("id"));
+        var dd=GetSomeDate(agoNum);//获取当前选择的日期
+        var y = dd.getFullYear();//获取年份
+        var m = dd.getMonth()+1;//获取当前的月份，0-11代表1-12所以+1
+        var d = dd.getDate();//获取几号
+        strdate=y+"-"+m+"-"+d;
+        $('#mirror_field').val(strdate);
+        $("input#dateSel").val(strdate);
+        //getRemoteRecord();
+        });
+
+
+
+    //发出post请求，更新记录
+    function updateRemoteRecord(){
+
+  });
+</script>
+
+
+<script type="text/javascript">
+$('#file').on('change', function(){
+    //console.info(this);
+    if(this.value.indexOf('csv')<0){
+        clearInputFile(this);
+        alert('请选择csv文件');
+    }
+    else{
+        $('#fileName').html(this.value);
+    }
+});
+
+$('#submitFile').click(function(){
+    if(!window.FormData) {　
+        alert('your brower is too old');
+        return false;
+    }
+    else{
+        var files = $('#file').prop('files');//获取到文件列表
+        if(files.length == 0){
+            alert('请选择文件');
+            return;
+        }
+        else{
+            var fd = new FormData();
+            fd.append("author", "lyc");                        // 可以增加表单数据
+            fd.append("file", files[0]);                           // 文件对象
+            $.ajax({
+                url:"/files",
+                type:"POST",
+                data:fd,
+                processData: false,
+                contentType: false,
+                dataType:'json',
+                success:function(res){alert(res['status']);getFileData();}
+            });
+        }
+    }
+});
+function getFileData(){
+    myLineChart.showLoading();
+    $.getJSON("/files",{filename:'myfile.csv'},function(fileData){
+        RefreshCharts(fileData);
+    });
+}
+function clearInputFile(f){
+    if(f.value){
+        try{
+            f.value = ''; //for IE11, latest Chrome/Firefox/Opera...
+        }catch(err){
+        }
+        if(f.value){ //for IE5 ~ IE10
+            var form = document.createElement('form'), ref = f.nextSibling;
+            form.appendChild(f);
+            form.reset();
+            ref.parentNode.insertBefore(f,ref);
+        }
+    }
+}
+</script>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myLineChart = echarts.init(document.getElementById('chart'));
+    ChartInit();
+    function RefreshCharts(fileData){
+        XData=new Array();
+        seriesData=new Array();
+        $.each(fileData,function(i,item){
+            XData.push(item['time']);
+            seriesData.push(item['value']);
+        });
+        lineOption.xAxis[0]['data']=XData;
+        lineOption.series[0]['data']=seriesData;
+        myLineChart.hideLoading();
+        myLineChart.setOption(lineOption);
+    }
+</script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化tree实例
+    treeOption={
+        "core" : {
+            "animation" : 0,
+            "check_callback" : true,
+            "themes" : { "stripes" : true },
+            "data" : [
+               { "id" : "ajson1", "parent" : "#", "text" : "系统" , "icon" : "glyphicon glyphicon-home"},
+            ],
+        },
+        "plugins" : [
+            "contextmenu", "dnd", "search",
+            "state", "types", "wholerow"
+        ]
+    };
+
+    function tree_create() {
+        var ref = $('#editTree').jstree(true),
+            sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        sel = sel[0];
+        sel = ref.create_node(sel, {"type":"file","icon" : "glyphicon glyphicon-screenshot"});
+        if(sel) {
+            ref.edit(sel);
+        }
+    };
+
+    function tree_rename() {
+        var ref = $('#editTree').jstree(true),
+            sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        sel = sel[0];
+        ref.edit(sel);
+    };
+
+    function tree_delete() {
+        var ref = $('#editTree').jstree(true),
+            sel = ref.get_selected();
+        if(!sel.length) { return false; }
+        ref.delete_node(sel);
+    };
+
+    $(document).ready(function(){
+        //$('#editTree').jstree();
+        $('#previewTree').jstree();
+        getSystems();
+    });
+</script>
+<script type="text/javascript">
+    var form = $("#cfgForm");
+    form.validate({
+        errorPlacement: function errorPlacement(error, element) { element.before(error); },
+        rules: {
+            confirm: {
+                equalTo: "#password"
+            }
+        }
+    });
+    form.children("div").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        transitionEffect: "slideLeft",
+        onStepChanging: function (event, currentIndex, newIndex)
+        {
+            if(currentIndex == 0 && newIndex == 1){
+                setEditTree();
+            }
+            if(currentIndex == 1 && newIndex == 2){
+                setPreviewTree();
+            }
+            form.validate().settings.ignore = ":disabled,:hidden";
+            return form.valid();
+        },
+        onFinishing: function (event, currentIndex)
+        {
+            form.validate().settings.ignore = ":disabled";
+            optionStr=JSON.stringify(treeOption.core.data);
+            $('#treeOption').val(optionStr);
+            return form.valid();
+        },
+        onFinished: function (event, currentIndex)
+        {
+            optionStr=JSON.stringify(treeOption.core.data);
+            $.post('/setup',{'treeOption': optionStr, 'source': 'json', 'isUpdate': 0},function(rec){alert(rec['state']);location.reload(true);});
+        }
+    });
+
+    function setEditTree(){
+        var sysName = $("#sysName").val();
+        //var levelNum = $("#levelNum").val();
+        treeOption.core.data = { "id" : "root", "parent" : "#", "text" : sysName , "icon" : "glyphicon glyphicon-home",};
+        //treeOption.types["#"]["max_depth"] = levelNum;
+        $('#editTree').jstree(treeOption);
+
+        ref = $('#editTree').jstree(true);
+        ref.rename_node('root',sysName);
+    }
+
+    function setPreviewTree(){
+        ref = $('#editTree').jstree();
+        treeOption.core.data = [];
+        for (node in ref._model.data){
+            if (node != '#'){
+                sel = ref._model.data[node];
+                data = {"id" : sel.id, "parent" : sel.parent, "text" : sel.text , "icon" : sel.icon,};
+                treeOption.core.data.push(data);
+            }
+        }
+        $('#previewTree').jstree().destroy();
+        $('#previewTree').jstree(treeOption);
+    }
+</script>
+
+<script type="text/javascript">
+    function getSystems(){
+        $.getJSON("/setup",function(systems){
+            var sysName;
+            var sysOptions;
+            var optionsJson;
+            if (systems['status']=='0'){
+                //alert(systems['result']);
+                $('#sysList').append("暂无系统，请新建！");
+                return;
+            }
+            else if (systems['status']=='1'){
+                $.each(systems['result'],function(i,system){
+                    sysName = system[0];
+                    treeId = sysName + "Tree";
+                    panelId = sysName + "Panel";
+                    sysOptions = system[1];
+                    optionsJson = eval('(' + sysOptions + ')');
+                    var newSys = "<div class='panel panel-default'>" +
+                                        "<div class='panel-heading' role='tab'>" +
+                                            "<h4 class='panel-title'>" +
+                                                "<a class='collapsed' role='button' data-toggle='collapse' data-parent='#sysList' href='#" + panelId + "' aria-expanded='false' aria-controls='collapseTwo'>" +
+                                                    sysName +
+                                                "</a>" +
+                                            "</h4>" +
+                                        "</div>" +
+                                        "<div id=" + panelId + " class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingTwo'>" +
+                                            "<div class='panel-body'>" +
+                                                "<div id=" + treeId + "></div>" +
+                                            "</div>" +
+                                        "</div>" +
+                                    "</div>"
+                    $('#sysList').append(newSys);
+                    treeOption.core.data = optionsJson;
+                    //$('#'+treeId).jstree(treeOption);
+                    $('#'+treeId).on('changed.jstree', function (e, data) {
+                        treeSel(e,data);
+                    }).jstree(treeOption);
+                });
+            }
+        });
+    }
+</script>
+<script>
+    function  treeSel(e, data) {
+        var i, j, r = [];
+        console.info(data)
+        for(i = 0, j = data.selected.length; i < j; i++) {
+          r.push(data.instance.get_node(data.selected[i]).text);
+        }
+        //console.info('Selected: ' + r.join(', '));
+        nodeSel = data.instance.get_node(data.selected[0]);
+        //console.info(data.instance.is_leaf(nodeSel))
+        //console.info(data.instance._model.data.root.text);
+        sysName = data.instance._model.data.root.text
+        if(data.instance.is_leaf(nodeSel)){
+            $("#prName").val(nodeSel.text);
+        }
+
+    }
+</script>
